@@ -1,13 +1,13 @@
 package com.trigger.flappy.game;
 
-import com.image.GameUtil;
+import com.image.ImageUtil;
 import com.others.flappy.game.GameBackground;
 import com.others.flappy.game.GameFrontGround;
-import com.others.flappy.method.BirdInvincibleHook;
 import com.trigger.flappy.method.InvincibleHook;
 import com.trigger.flappy.object.UltraMan;
 import com.trigger.flappy.util.Constant;
 import com.trigger.flappy.object.Beam;
+import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -15,10 +15,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.trigger.flappy.util.GameUtil.beams;
 
 public class GameFrame extends Frame {
 
-    private Beam beam;
     private UltraMan ultraMan;
 
     private GameBackground gameBackground;
@@ -79,7 +82,7 @@ public class GameFrame extends Frame {
      */
     private void add(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP: // 如果按下的是方向键上键
+            case KeyEvent.VK_UP: // 按下方向键上键
                 ultraMan.fly(1);
                 break;
             case KeyEvent.VK_DOWN:
@@ -91,7 +94,10 @@ public class GameFrame extends Frame {
             case KeyEvent.VK_RIGHT:
                 ultraMan.fly(4);
                 break;
-            case KeyEvent.VK_SPACE: // 如果按下的是空格键
+            case KeyEvent.VK_A: // 按下A键，发射光线
+                createBeam();
+                break;
+            case KeyEvent.VK_SPACE: // 按下空格键
                 if (ultraMan.getHeart() < 1) { // 只有小鸟死亡时才生效
                     restart();
                 }
@@ -116,6 +122,9 @@ public class GameFrame extends Frame {
             case KeyEvent.VK_RIGHT:
                 ultraMan.fly(8);
                 break;
+//            case KeyEvent.VK_A:
+//                deleteBeam();
+//                break;
         }
     }
 
@@ -132,8 +141,6 @@ public class GameFrame extends Frame {
      */
     public void initGame(InvincibleHook invincibleHook) {
         ultraMan = new UltraMan();
-        beam = new Beam(GameUtil.loadBufferedImage(Constant.BEAM_IMG),
-                ultraMan.getX()+3, ultraMan.getY(), 30, 10, 5);
         gameBackground = new GameBackground();
         gameFrontGround = new GameFrontGround();
         gameBarrierLayer = new GameBarrierLayer(invincibleHook);
@@ -162,7 +169,6 @@ public class GameFrame extends Frame {
      */
     @Override
     public void update(Graphics g) {
-
         if (ultraMan.getHeart() > 0) {
             /**
              * 缓存思想解决屏幕闪烁问题 双缓冲技术
@@ -173,8 +179,16 @@ public class GameFrame extends Frame {
             Graphics graphics = bufferedImage.getGraphics();
             gameBackground.draw(graphics);
             gameFrontGround.draw(graphics);
-            gameBarrierLayer.draw(graphics, ultraMan);
+            gameBarrierLayer.draw(graphics, ultraMan, beams);
             ultraMan.drawSelf(graphics);
+            // 绘制光线
+            for (int i=0; i<beams.size(); i++) {
+                beams.get(i).drawSelf(graphics);
+            }
+            deleteBeamFromList();
+//            if (beam != null) {
+//                beam.drawSelf(graphics);
+//            }
             // 一次性将图片绘制到屏幕中
             g.drawImage(bufferedImage, 0, 0, null);
         } else {
@@ -191,5 +205,38 @@ public class GameFrame extends Frame {
             g.setFont(new Font("微软雅黑", 1, 30));
             g.drawString(reset, (int) (com.others.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.others.flappy.util.Constant.FRAME_HEIGHT / 2) + 50);
         }
+    }
+
+    /**
+     * 创建光线对象
+     */
+    public void createBeam() {
+        Beam beam = new Beam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
+                ultraMan.getX()+80, ultraMan.getY()+30, 300, 50, 10);
+        beams.add(beam);
+    }
+
+    /**
+     * 判断光线对象是否飞出屏幕外，如果飞出，则将其删除
+     */
+    public void deleteBeamFromList() {
+        for (int i=0; i<beams.size(); i++) {
+            if (beams.get(i).getX() > Constant.FRAME_WIDTH + beams.get(i).getWidth()) {
+                System.out.println("删除序号" + i + "的光线对象");
+                beams.remove(beams.get(i));
+            }
+        }
+    }
+
+    /**
+     * 创建光线对象（不断发光线）
+     */
+    public void createBeamList() {
+        Beam beam = new Beam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
+                ultraMan.getX()+80, ultraMan.getY()+30, 500, 50, 10);
+        beams.add(beam);
+//        // 当前列表中光线对象数量
+//        int beamListLen = GameUtil.beamList.size();
+//        GameUtil.objList.add(GameUtil.beamList.get(beamListLen - 1));
     }
 }

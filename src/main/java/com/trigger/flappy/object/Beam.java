@@ -26,5 +26,7 @@ public class Beam extends ObjectBase {
     @Override
     public void drawSelf(Graphics g) {
         super.drawSelf(g);
+        // 实现光线的移动
+        x += speed;
     }
 }

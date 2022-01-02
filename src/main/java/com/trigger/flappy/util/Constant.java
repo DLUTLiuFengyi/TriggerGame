@@ -13,6 +13,9 @@ public class Constant {
     public static final int FRAME_X = 200;
     public static final int FRAME_Y = 200;
 
+    // 障碍物图片
+    public static final String[] BARRIER_IMG = {"img/barrier.png", "img/barrier_up.png", "img/barrier_down.png"};
+
     // 怪兽图片
     public static final String[] MONSTER_IMG = {"img/monster1.png", "img/monster2.png", "img/monster3.png"};
 

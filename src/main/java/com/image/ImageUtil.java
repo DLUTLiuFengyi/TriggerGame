@@ -13,6 +13,18 @@ import java.io.IOException;
 public class ImageUtil {
 
     /**
+     * 加载图片
+     */
+    public static BufferedImage loadBufferedImage(String imgPath) {
+        try {
+            return ImageIO.read(new FileInputStream(imgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 调整图片尺寸
      * @param scaling 调整比例
      */

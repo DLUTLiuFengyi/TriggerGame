@@ -1,8 +1,8 @@
 package com.others.flappy.game;
 
+import com.image.ImageUtil;
 import com.others.flappy.object.Cloud;
 import com.others.flappy.util.Constant;
-import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,7 +32,7 @@ public class GameFrontGround {
         img = new BufferedImage[CLOUD_COUNT];
 
         for (int i=0; i<CLOUD_COUNT; i++) {
-            img[i] = GameUtil.loadBufferedImage(Constant.CLOUD_IMG[i]);
+            img[i] = ImageUtil.loadBufferedImage(Constant.CLOUD_IMG[i]);
         }
 
         random = new Random();

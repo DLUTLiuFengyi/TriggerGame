@@ -1,18 +1,21 @@
 package com.trigger.flappy.game;
 
 import com.others.flappy.game.GameTime;
-import com.others.flappy.object.Barrier;
-import com.others.flappy.object.BarrierPool;
-import com.others.flappy.object.Bird;
+import com.trigger.flappy.object.Barrier;
+import com.trigger.flappy.object.BarrierPool;
 import com.others.flappy.util.Constant;
 import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.object.Beam;
 import com.trigger.flappy.object.UltraMan;
+import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.trigger.flappy.util.GameUtil.beams;
 
 public class GameBarrierLayer {
 
@@ -31,12 +34,12 @@ public class GameBarrierLayer {
     /**
      * 绘制障碍物
      */
-    public void draw(Graphics g, UltraMan ultraMan) {
+    public void draw(Graphics g, UltraMan ultraMan, List<Beam> beams) {
         for (int i=0; i<barriers.size(); i++) {
             Barrier barrier = barriers.get(i);
             // 判断，如果障碍物此时可见，则代表其还应在屏幕内，线程对其进行保持绘制
             if (barrier.isVisible()) {
-                barrier.draw(g);
+                barrier.drawSelf(g);
             } else {
                 // 否则 从barriers中删除，并返回给对象池
                 Barrier remove = barriers.remove(i);
@@ -45,7 +48,9 @@ public class GameBarrierLayer {
             }
 //            barrier.draw(g);
         }
-        collide(ultraMan);
+
+        collideWithBirdOrBeam(ultraMan, beams);
+
         genericLogic(g);
     }
 
@@ -211,11 +216,12 @@ public class GameBarrierLayer {
     /**
      * 判断小鸟与障碍物发生碰撞
      */
-    public void collide(UltraMan ultraMan) {
+    public void collideWithBirdOrBeam(UltraMan ultraMan, List<Beam> beams) {
         for (int i=0; i<barriers.size(); i++) {
             Barrier barrier = barriers.get(i);
+            // 判断奥特曼矩形与障碍物矩形是否相交
             if (!ultraMan.isInvincible()) {
-                // 判断小鸟矩形与障碍物矩形是否相交
+                // 如果奥特曼不是无敌状态
                 if (barrier.getRect().intersects(ultraMan.getRect())) {
                     ultraMan.setHeart(ultraMan.getHeart() - 1);
                     System.out.println("撞上啦");
@@ -223,9 +229,9 @@ public class GameBarrierLayer {
                         System.out.println("生命值耗尽");
                         return ;
                     }
-                    // 碰到障碍物后，小鸟短时间内无敌，以避免一直卡在一个障碍物上
+                    // 碰到障碍物后，奥特曼短时间内无敌，以避免一直卡在一个障碍物上
                     ultraMan.setInvincible(true);
-
+                    // 回调函数，在新的线程中将无敌时间结束后的奥特曼设为不无敌状态
                     invincibleHook.setNonInvincible(ultraMan);
                 }
             }

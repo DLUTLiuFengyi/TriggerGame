@@ -1,6 +1,6 @@
 package com.trigger.flappy.object;
 
-import com.image.GameUtil;
+import com.image.ImageUtil;
 import com.others.flappy.util.Constant;
 
 import java.awt.*;
@@ -53,7 +53,7 @@ public class UltraMan extends ObjectBase {
     public UltraMan() {
         images = new BufferedImage[BIRD_IMG_COUNT];
         for (int i=0; i<BIRD_IMG_COUNT; i++) {
-            images[i] = GameUtil.loadBufferedImage(Constant.BIRD_IMG[i]);
+            images[i] = ImageUtil.loadBufferedImage(Constant.BIRD_IMG[i]);
         }
 
         x = 200;

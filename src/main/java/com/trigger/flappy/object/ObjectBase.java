@@ -87,7 +87,7 @@ public class ObjectBase {
     }
 
     public void drawSelf(Graphics g) {
-        g.drawImage(img, x, y, null);
+        g.drawImage(img, x, y, width, height, null);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.others.flappy.object;
 
+import com.image.ImageUtil;
 import com.others.flappy.util.Constant;
-import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -49,7 +49,7 @@ public class Bird{
     public Bird() {
         images = new BufferedImage[BIRD_IMG_COUNT];
         for (int i=0; i<BIRD_IMG_COUNT; i++) {
-            images[i] = GameUtil.loadBufferedImage(Constant.BIRD_IMG[i]);
+            images[i] = ImageUtil.loadBufferedImage(Constant.BIRD_IMG[i]);
         }
 
         int w = images[0].getWidth();

@@ -1,15 +1,17 @@
-package com.others.flappy.object;
+package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
-import com.others.flappy.util.Constant;
+import com.trigger.flappy.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static com.trigger.flappy.util.GameUtil.*;
+
 /**
  * 障碍物类
  */
-public class Barrier {
+public class Barrier extends ObjectBase {
 
     // 障碍物图片
     private static BufferedImage[] imgs;
@@ -25,10 +27,6 @@ public class Barrier {
         }
     }
 
-    // 位置
-    private int x, y;
-    // 宽度和高度
-    private int width, height;
     // 障碍物类型
     private int type;
     // 从上向下
@@ -40,14 +38,8 @@ public class Barrier {
     // 可动
     public static final int TYPE_MOBILE = 6;
 
-    // 障碍物速度
-    private int speed = 3;
-
     // 障碍物存活状态
     private boolean visible;
-
-    // 障碍物矩形
-    private Rectangle rect;
 
     // 获得障碍物的宽度和高度
     public static final int BARRIER_WIDTH = imgs[0].getWidth(); // 悬浮的宽度
@@ -57,6 +49,7 @@ public class Barrier {
 
     public Barrier() {
         rect = new Rectangle();
+        speed = 3;
     }
 
     public Barrier(int x, int y, int height, int type) {
@@ -65,12 +58,26 @@ public class Barrier {
         this.width = BARRIER_WIDTH; // 宽度固定
         this.height = height;
         this.type = type;
+        speed = 3;
     }
 
     /**
      * 根据不同的类型绘制障碍物
      */
-    public void draw(Graphics g) {
+    @Override
+    public void drawSelf(Graphics g) {
+
+        for (int j=0; j<beams.size(); j++) {
+            if (this.getRect().intersects(beams.get(j).getRect())) {
+                System.out.println("消灭");
+                // 需要先将它们的坐标改变
+                this.setX(-200);
+                this.setY(200);
+                this.setVisible(false);
+                break;
+            }
+        }
+
         switch (type) {
             case TYPE_TOP:
                 drawTop(g);

@@ -1,7 +1,7 @@
 package com.trigger.flappy.object;
 
+import com.image.ImageUtil;
 import com.trigger.flappy.util.Constant;
-import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +18,7 @@ public class Monster extends ObjectBase {
         final int COUNT = 3;
         imgs = new BufferedImage[COUNT];
         for (int i=0; i<COUNT; i++) {
-            imgs[i] = GameUtil.loadBufferedImage(Constant.MONSTER_IMG[i]);
+            imgs[i] = ImageUtil.loadBufferedImage(Constant.MONSTER_IMG[i]);
         }
     }
 

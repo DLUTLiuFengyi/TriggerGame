@@ -11,6 +11,6 @@ public class ImageEdit {
 //        writeImg(rotate(180, removeBackground(changeScale(readImage(inputPath), 0.3))), savePath);
 //        ImageUtil.writeImg(ImageUtil.flip(ImageUtil.changeScale(
 //                ImageUtil.removeBackground(ImageUtil.readImage(inputPath)), 0.3)), savePath);
-        writeImg(flip(changeScale(readImage(inputPath), 0.2)), savePath);
+        writeImg(flip(changeScale(readImage(inputPath), 0.5)), savePath);
     }
 }

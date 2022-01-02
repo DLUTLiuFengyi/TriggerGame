@@ -1,7 +1,7 @@
 package com.others.flappy.game;
 
+import com.image.ImageUtil;
 import com.others.flappy.util.Constant;
-import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +15,7 @@ public class GameBackground {
 
     // 初始化资源
     public GameBackground() {
-        bkimg = GameUtil.loadBufferedImage(Constant.BK_IMG_OATH);
+        bkimg = ImageUtil.loadBufferedImage(Constant.BK_IMG_OATH);
     }
 
     // 绘制方法，把图片画到窗口上
