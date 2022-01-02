@@ -1,5 +1,6 @@
 package com.others.flappy.game;
 
+import com.others.flappy.method.BirdInvincibleHook;
 import com.others.flappy.opponent.Barrier;
 import com.others.flappy.util.Constant;
 import com.others.flappy.object.Bird;
@@ -20,9 +21,12 @@ public class GameBarrierLayer {
 
     private GameTime gameTime;
 
-    public GameBarrierLayer() {
-        barriers = new ArrayList<Barrier>();
-        gameTime = new GameTime();
+    private BirdInvincibleHook birdInvincibleHook;
+
+    public GameBarrierLayer(BirdInvincibleHook birdInvincibleHook) {
+        this.barriers = new ArrayList<Barrier>();
+        this.gameTime = new GameTime();
+        this.birdInvincibleHook = birdInvincibleHook;
     }
 
     /**
@@ -221,13 +225,13 @@ public class GameBarrierLayer {
                         return ;
                     }
                     // 碰到障碍物后，小鸟短时间内无敌，以避免一直卡在一个障碍物上
-//                    bird.setInvincible(true);
+                    bird.setInvincible(true);
+
+                    birdInvincibleHook.setNonInvincible(bird);
                 }
             }
         }
     }
-
-
 
     /**
      * 重新开始游戏，清空障碍物的池子

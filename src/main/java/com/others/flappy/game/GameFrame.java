@@ -1,5 +1,7 @@
 package com.others.flappy.game;
 
+import com.others.flappy.method.BirdInvincibleHook;
+import com.others.flappy.method.GameExitHook;
 import com.others.flappy.util.Constant;
 import com.others.flappy.object.Bird;
 
@@ -25,7 +27,7 @@ public class GameFrame extends Frame {
             Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
     );
 
-    private Boolean gameExit = false; // 游戏结束状态，用于控制程序安全退出
+    private volatile Boolean gameExit = false; // 游戏结束状态，用于控制程序安全退出
 
     public GameFrame() {
         // 窗口是否可见
@@ -48,7 +50,7 @@ public class GameFrame extends Frame {
             }
         });
 
-        initGamg();
+        initGamg(new BirdInvincibleHook());
 
         /**
          * 用于刷新图片的线程
@@ -128,9 +130,9 @@ public class GameFrame extends Frame {
      * 重新开始游戏
      */
     public void restart() {
-        synchronized (gameExit) {
-            gameExit = false;
-        }
+//        synchronized (gameExit) {
+//            gameExit = false;
+//        }
         gameBarrierLayer.restart(); // 清空障碍物对象列表
         bird.restart(); // 将小鸟位置初始化
     }
@@ -138,11 +140,11 @@ public class GameFrame extends Frame {
     /**
      * 对游戏中的对象进行实例化
      */
-    public void initGamg() {
+    public void initGamg(BirdInvincibleHook birdInvincibleHook) {
         gameBackground = new GameBackground();
         bird = new Bird();
         gameFrontGround = new GameFrontGround();
-        gameBarrierLayer = new GameBarrierLayer();
+        gameBarrierLayer = new GameBarrierLayer(birdInvincibleHook);
     }
 
     class GameRun extends Thread {
@@ -196,7 +198,8 @@ public class GameFrame extends Frame {
             g.setFont(new Font("微软雅黑", 1, 30));
             g.drawString(reset, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2) + 50);
 
-            gameExit = true;
+//            gameExit = true;
+//            new GameExitHook().autoExitGame(gameExit);
         }
     }
 
