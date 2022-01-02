@@ -1,6 +1,6 @@
 package com.trigger.flappy.object;
 
-import com.others.flappy.util.Constant;
+import com.trigger.flappy.util.Constant;
 import com.image.GameUtil;
 
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * 障碍物类（怪兽）
  */
-public class Monster {
+public class Monster extends ObjectBase {
 
     private static BufferedImage[] imgs;
 
@@ -22,8 +22,6 @@ public class Monster {
         }
     }
 
-    private int x, y;
-    private int width, height;
     private int type;
     // 从上向下
     public static final int TYPE_TOP_NORMAL = 0;
@@ -32,11 +30,7 @@ public class Monster {
     // 悬浮
     public static final int TYPE_HOVER_NORMAL = 4;
 
-    private int speed = 2;
-
     private boolean visible;
-
-    private Rectangle rect;
 
     // 随机决定当前生成哪个怪兽
     private Random monsterRan = new Random();
@@ -156,14 +150,6 @@ public class Monster {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    public Rectangle getRect() {
-        return rect;
-    }
-
-    public void setRect(Rectangle rect) {
-        this.rect = rect;
     }
 
     /**

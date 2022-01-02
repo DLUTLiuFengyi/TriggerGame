@@ -15,7 +15,7 @@ public class Constant {
     public static final int FRAME_X = 200;
     public static final int FRAME_Y = 200;
 
-    // 图片路径
+    // 背景图片路径
     public static final String BK_IMG_OATH = "img/background1.png";
 
     // 游戏背景颜色
@@ -30,6 +30,4 @@ public class Constant {
 
     // 障碍物图片
     public static final String[] BARRIER_IMG = {"img/barrier.png", "img/barrier_up.png", "img/barrier_down.png"};
-
-    public static final String[] MONSTER_IMG = {"img/monster1.png", "img/monster2.png", "img/monster3.png"};
 }

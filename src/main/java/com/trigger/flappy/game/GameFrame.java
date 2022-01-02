@@ -1,9 +1,13 @@
-package com.others.flappy.game;
+package com.trigger.flappy.game;
 
+import com.image.GameUtil;
+import com.others.flappy.game.GameBackground;
+import com.others.flappy.game.GameFrontGround;
 import com.others.flappy.method.BirdInvincibleHook;
-import com.others.flappy.method.GameExitHook;
-import com.others.flappy.util.Constant;
-import com.others.flappy.object.Bird;
+import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.object.UltraMan;
+import com.trigger.flappy.util.Constant;
+import com.trigger.flappy.object.Beam;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -12,22 +16,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-/**
- * 游戏主窗口
- */
 public class GameFrame extends Frame {
+
+    private Beam beam;
+    private UltraMan ultraMan;
 
     private GameBackground gameBackground;
     private GameFrontGround gameFrontGround;
     private GameBarrierLayer gameBarrierLayer;
 
-    private Bird bird;
-
     private BufferedImage bufferedImage = new BufferedImage(
             Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
     );
-
-    private volatile Boolean gameExit = false; // 游戏结束状态，用于控制程序安全退出
 
     public GameFrame() {
         // 窗口是否可见
@@ -50,7 +50,7 @@ public class GameFrame extends Frame {
             }
         });
 
-        initGame(new BirdInvincibleHook());
+        initGame(new InvincibleHook());
 
         /**
          * 用于刷新图片的线程
@@ -72,13 +72,6 @@ public class GameFrame extends Frame {
                 minu(e);
             }
         });
-
-//        /**
-//         * 新开一个线程，当游戏结束后用户在一定时间内没有选择重新开始时
-//         * 自动将游戏程序终止退出
-//         */
-//        GameExit gameExit = new GameExit();
-//        gameExit.start();
     }
 
     /**
@@ -87,19 +80,19 @@ public class GameFrame extends Frame {
     private void add(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 如果按下的是方向键上键
-                bird.fly(1);
+                ultraMan.fly(1);
                 break;
             case KeyEvent.VK_DOWN:
-                bird.fly(2);
+                ultraMan.fly(2);
                 break;
             case KeyEvent.VK_LEFT:
-                bird.fly(3);
+                ultraMan.fly(3);
                 break;
             case KeyEvent.VK_RIGHT:
-                bird.fly(4);
+                ultraMan.fly(4);
                 break;
             case KeyEvent.VK_SPACE: // 如果按下的是空格键
-                if (bird.getHeart() < 1) { // 只有小鸟死亡时才生效
+                if (ultraMan.getHeart() < 1) { // 只有小鸟死亡时才生效
                     restart();
                 }
                 break;
@@ -112,16 +105,16 @@ public class GameFrame extends Frame {
     private void minu(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 如果松开的是方向键上键
-                bird.fly(5);
+                ultraMan.fly(5);
                 break;
             case KeyEvent.VK_DOWN:
-                bird.fly(6);
+                ultraMan.fly(6);
                 break;
             case KeyEvent.VK_LEFT:
-                bird.fly(7);
+                ultraMan.fly(7);
                 break;
             case KeyEvent.VK_RIGHT:
-                bird.fly(8);
+                ultraMan.fly(8);
                 break;
         }
     }
@@ -130,21 +123,20 @@ public class GameFrame extends Frame {
      * 重新开始游戏
      */
     public void restart() {
-//        synchronized (gameExit) {
-//            gameExit = false;
-//        }
         gameBarrierLayer.restart(); // 清空障碍物对象列表
-        bird.restart(); // 将小鸟位置初始化
+        ultraMan.restart(); // 将小鸟位置初始化
     }
 
     /**
      * 对游戏中的对象进行实例化
      */
-    public void initGame(BirdInvincibleHook birdInvincibleHook) {
+    public void initGame(InvincibleHook invincibleHook) {
+        ultraMan = new UltraMan();
+        beam = new Beam(GameUtil.loadBufferedImage(Constant.BEAM_IMG),
+                ultraMan.getX()+3, ultraMan.getY(), 30, 10, 5);
         gameBackground = new GameBackground();
-        bird = new Bird();
         gameFrontGround = new GameFrontGround();
-        gameBarrierLayer = new GameBarrierLayer(birdInvincibleHook);
+        gameBarrierLayer = new GameBarrierLayer(invincibleHook);
     }
 
     class GameRun extends Thread {
@@ -171,7 +163,7 @@ public class GameFrame extends Frame {
     @Override
     public void update(Graphics g) {
 
-        if (bird.getHeart() > 0) {
+        if (ultraMan.getHeart() > 0) {
             /**
              * 缓存思想解决屏幕闪烁问题 双缓冲技术
              * 思路：先创建一个空的图片，把所有组件先绘制在空的图片上
@@ -181,8 +173,8 @@ public class GameFrame extends Frame {
             Graphics graphics = bufferedImage.getGraphics();
             gameBackground.draw(graphics);
             gameFrontGround.draw(graphics);
-            gameBarrierLayer.draw(graphics, bird);
-            bird.draw(graphics);
+            gameBarrierLayer.draw(graphics, ultraMan);
+            ultraMan.drawSelf(graphics);
             // 一次性将图片绘制到屏幕中
             g.drawImage(bufferedImage, 0, 0, null);
         } else {
@@ -192,39 +184,12 @@ public class GameFrame extends Frame {
             g.setColor(Color.red);
             g.setFont(new Font("微软雅黑", 1, 45));
             // 画出
-            g.drawString(over, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2));
+            g.drawString(over, (int) (com.others.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.others.flappy.util.Constant.FRAME_HEIGHT / 2));
 
             String reset = "Press Space to Restart";
             g.setColor(Color.orange);
             g.setFont(new Font("微软雅黑", 1, 30));
-            g.drawString(reset, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2) + 50);
-
-//            gameExit = true;
-//            new GameExitHook().autoExitGame(gameExit);
+            g.drawString(reset, (int) (com.others.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.others.flappy.util.Constant.FRAME_HEIGHT / 2) + 50);
         }
     }
-
-    /**
-     * 游戏结束后，在一定时间内没有选择重新开始游戏的话
-     * 则退出程序
-     */
-    class GameExit extends Thread {
-        @Override
-        public void run() {
-            while (true) {
-                if (gameExit) {
-                    // 等待5s后退出程序
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (gameExit) {
-                        System.exit(0);
-                    }
-                }
-            }
-        }
-    }
-
 }
