@@ -1,4 +1,4 @@
-package com.trigger.flappy.opponent;
+package com.trigger.flappy.object;
 
 import com.others.flappy.util.Constant;
 import com.image.GameUtil;

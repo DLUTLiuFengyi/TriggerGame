@@ -9,7 +9,7 @@ public class Constant {
     public static final int FRAME_HEIGHT = 800;
 
     // 窗口标题
-    public static final String FRAME_TITLE = "Flying Bird";
+    public static final String FRAME_TITLE = "Trigger Flappy";
 
     // 窗口初始化位置
     public static final int FRAME_X = 200;

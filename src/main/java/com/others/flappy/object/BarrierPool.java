@@ -1,4 +1,6 @@
-package com.others.flappy.opponent;
+package com.others.flappy.object;
+
+import com.others.flappy.object.Barrier;
 
 import java.util.ArrayList;
 import java.util.List;

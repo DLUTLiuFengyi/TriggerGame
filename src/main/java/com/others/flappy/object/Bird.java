@@ -38,7 +38,8 @@ public class Bird{
     private Rectangle rect;
 
     // 小鸟生命值
-    private int heart = 5; // 默认有5颗♥
+    private final static int FULL_HEART = 5;
+    private int heart = FULL_HEART; // 初始有5颗♥
     private boolean invincible = false;
     private double invincibleSeconds = 1; // 无敌时间 默认为1秒
 
@@ -189,12 +190,29 @@ public class Bird{
     }
 
     /**
-     * 显示小鸟当前信息（血量，速度）
+     * 显示小鸟当前信息（血量）
      */
     private void showBirdStatus(Graphics g) {
+//        /**
+//         * 简单地用字符串表示血量
+//         */
+//        g.setColor(Color.white);
+//        g.setFont(new Font("微软雅黑", 1, 25));
+//        g.drawString("Blood: " + showHeart(), 30, 130);
+        /**
+         * 绘制血条
+         */
+        // 绘制血条信息
         g.setColor(Color.white);
         g.setFont(new Font("微软雅黑", 1, 25));
-        g.drawString("Blood: " + showHeart(), 30, 130);
+        g.drawString("Blood: ", 30, 130);
+        // 绘制作为血条背景的矩形
+        g.setColor(Color.white);
+        g.fillRect(125, 115, 150, 15);
+        // 绘制血量
+        g.setColor(Color.red);
+        // 血量矩形的宽度是血量比例
+        g.fillRect(125, 115, this.heart * 150 / FULL_HEART, 15);
     }
 
     /**

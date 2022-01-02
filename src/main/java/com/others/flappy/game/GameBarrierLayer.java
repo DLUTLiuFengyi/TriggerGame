@@ -1,10 +1,10 @@
 package com.others.flappy.game;
 
 import com.others.flappy.method.BirdInvincibleHook;
-import com.others.flappy.opponent.Barrier;
+import com.others.flappy.object.Barrier;
 import com.others.flappy.util.Constant;
 import com.others.flappy.object.Bird;
-import com.others.flappy.opponent.BarrierPool;
+import com.others.flappy.object.BarrierPool;
 
 import java.awt.*;
 import java.io.*;

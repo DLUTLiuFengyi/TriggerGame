@@ -172,12 +172,13 @@ public class GameFrame extends Frame {
     public void update(Graphics g) {
 
         if (bird.getHeart() > 0) {
+            /**
+             * 缓存思想解决屏幕闪烁问题 双缓冲技术
+             * 思路：先创建一个空的图片，把所有组件先绘制在空的图片上
+             * 然后把绘制好的图片一次性绘制到主窗口中
+             */
             // 得到缓存图片的画笔
             Graphics graphics = bufferedImage.getGraphics();
-
-            /**
-             * 把所有要绘制的东西绘制在画板上，再一次性绘制出来，解决屏幕闪烁问题
-             */
             gameBackground.draw(graphics);
             gameFrontGround.draw(graphics);
             gameBarrierLayer.draw(graphics, bird);
