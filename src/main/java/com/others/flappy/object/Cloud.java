@@ -1,4 +1,4 @@
-package com.trigger.flappy.object;
+package com.others.flappy.object;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package com.trigger.flappy.util;
+package com.image;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.trigger.flappy.util;
+package com.others.flappy.util;
 
 import java.awt.*;
 

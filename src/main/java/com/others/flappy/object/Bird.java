@@ -1,7 +1,7 @@
-package com.trigger.flappy.object;
+package com.others.flappy.object;
 
-import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
+import com.others.flappy.util.Constant;
+import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,7 +32,7 @@ public class Bird{
     private boolean up = false, down = false;
 
     // 小鸟初始移动速度
-    private int speed = 5;
+    private int speed = 7;
 
     // 小鸟的矩形，用于碰撞处理
     private Rectangle rect;
@@ -41,6 +41,9 @@ public class Bird{
     private int heart = 5; // 默认有5颗♥
     private boolean invincible = false;
     private double invincibleSeconds = 1; // 无敌时间 默认为1秒
+
+    // 小鸟加速度
+    private int acceleration;
 
     public Bird() {
         images = new BufferedImage[BIRD_IMG_COUNT];
@@ -89,7 +92,7 @@ public class Bird{
         g.drawImage(images[state], x, y, null);
 
         // 绘制出小鸟的矩形
-        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
+//        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
         rect.x = x;
         rect.y = y;
 
@@ -114,15 +117,32 @@ public class Bird{
 //        }
         switch (state) {
             case STATE_UP: // 向上
+//                // 加速度逻辑
+//                acceleration -= 1;
+//                y += acceleration;
+//                // 最高速度限制
+//                if (acceleration < -10) {
+//                    acceleration = 10;
+//                }
+
                 y -= speed;
                 if (y < 20) { // 保证小鸟不飞出屏幕
                     y = 20;
                 }
                 break;
             case STATE_DOWN: // 向下
+//                // 加速度逻辑
+//                acceleration += 1;
+//                y += acceleration;
+//                // 最高速度限制
+//                if (acceleration > 10) {
+//                    acceleration = 10;
+//                }
+
                 y += speed;
                 if (y > Constant.FRAME_HEIGHT - 182) { // 保证小鸟不落出屏幕
                     y = Constant.FRAME_HEIGHT - 182;
+                    acceleration = 0;
                 }
                 break;
             case STATE_LEFT: // 向左

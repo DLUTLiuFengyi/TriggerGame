@@ -1,7 +1,7 @@
 package com.trigger.flappy.opponent;
 
-import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
+import com.others.flappy.util.Constant;
+import com.image.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -67,10 +67,10 @@ public class Monster {
     public void draw(Graphics g) {
         switch (type) {
             case TYPE_TOP_NORMAL:
-                drawTopNormal(g);
+                drawTop(g);
                 break;
             case TYPE_BOTTOM_NORMAL:
-                drawNormalTop(g);
+                drawBottom(g);
                 break;
         }
     }
@@ -78,7 +78,7 @@ public class Monster {
     /**
      * 绘制从上向下的怪兽
      */
-    private void drawTopNormal(Graphics g) {
+    private void drawTop(Graphics g) {
         int monsterId = monsterRan.nextInt(3);
 
         // 绘制怪兽
@@ -96,7 +96,7 @@ public class Monster {
     /**
      * 绘制从下往上的怪兽
      */
-    private void drawNormalTop(Graphics g) {
+    private void drawBottom(Graphics g) {
         int monsterId = monsterRan.nextInt(3);
 
         // 绘制怪兽

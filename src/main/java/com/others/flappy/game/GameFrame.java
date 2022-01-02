@@ -1,8 +1,7 @@
-package com.trigger.flappy.main;
+package com.others.flappy.game;
 
-import com.trigger.flappy.object.Bird;
-
-import static com.trigger.flappy.util.Constant.*;
+import com.others.flappy.util.Constant;
+import com.others.flappy.object.Bird;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -23,7 +22,7 @@ public class GameFrame extends Frame {
     private Bird bird;
 
     private BufferedImage bufferedImage = new BufferedImage(
-            FRAME_WIDTH, FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
+            Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
     );
 
     private Boolean gameExit = false; // 游戏结束状态，用于控制程序安全退出
@@ -32,11 +31,11 @@ public class GameFrame extends Frame {
         // 窗口是否可见
         setVisible(true);
         // 窗口大小
-        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        setSize(Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT);
         // 窗口标题
-        setTitle(FRAME_TITLE);
+        setTitle(Constant.FRAME_TITLE);
         // 初始化位置
-        setLocation(FRAME_X, FRAME_Y);
+        setLocation(Constant.FRAME_X, Constant.FRAME_Y);
         // 窗口大小不可变
         setResizable(false);
 
@@ -72,12 +71,12 @@ public class GameFrame extends Frame {
             }
         });
 
-        /**
-         * 新开一个线程，当游戏结束后用户在一定时间内没有选择重新开始时
-         * 自动将游戏程序终止退出
-         */
-        GameExit gameExit = new GameExit();
-        gameExit.start();
+//        /**
+//         * 新开一个线程，当游戏结束后用户在一定时间内没有选择重新开始时
+//         * 自动将游戏程序终止退出
+//         */
+//        GameExit gameExit = new GameExit();
+//        gameExit.start();
     }
 
     /**
@@ -190,12 +189,12 @@ public class GameFrame extends Frame {
             g.setColor(Color.red);
             g.setFont(new Font("微软雅黑", 1, 45));
             // 画出
-            g.drawString(over, (int) (FRAME_WIDTH / 2), (int)(FRAME_HEIGHT / 2));
+            g.drawString(over, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2));
 
             String reset = "Press Space to Restart";
             g.setColor(Color.orange);
             g.setFont(new Font("微软雅黑", 1, 30));
-            g.drawString(reset, (int) (FRAME_WIDTH / 2), (int)(FRAME_HEIGHT / 2) + 50);
+            g.drawString(reset, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2) + 50);
 
             gameExit = true;
         }

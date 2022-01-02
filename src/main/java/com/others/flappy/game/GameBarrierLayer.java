@@ -1,9 +1,9 @@
-package com.trigger.flappy.main;
+package com.others.flappy.game;
 
-import com.trigger.flappy.object.Bird;
-import com.trigger.flappy.opponent.Barrier;
-import com.trigger.flappy.opponent.BarrierPool;
-import com.trigger.flappy.util.Constant;
+import com.others.flappy.opponent.Barrier;
+import com.others.flappy.util.Constant;
+import com.others.flappy.object.Bird;
+import com.others.flappy.opponent.BarrierPool;
 
 import java.awt.*;
 import java.io.*;
@@ -31,6 +31,7 @@ public class GameBarrierLayer {
     public void draw(Graphics g, Bird bird) {
         for (int i=0; i<barriers.size(); i++) {
             Barrier barrier = barriers.get(i);
+            // 判断，如果障碍物此时可见，则代表其还应在屏幕内，线程对其进行保持绘制
             if (barrier.isVisible()) {
                 barrier.draw(g);
             } else {
@@ -39,7 +40,7 @@ public class GameBarrierLayer {
                 BarrierPool.setPool(remove);
                 i -= 1;
             }
-            barrier.draw(g);
+//            barrier.draw(g);
         }
         collideBird(bird);
         genericLogic(g);
@@ -71,8 +72,19 @@ public class GameBarrierLayer {
             if (last.isIntoFrame()) {
                 generateRandomHeight();
 //                generateOneGroup(); // 普通方法，直接创建内存对象
-                getBarrierFromPool(Constant.FRAME_WIDTH, 0, numberTop, 0);
-                getBarrierFromPool(Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT-numberDown, numberDown, 2);
+                if (barrierKindNumber < 150) {
+                    // 如果随机数小于50，生成一种新的障碍物
+                    // 悬空，type = 4
+                    getBarrierFromPool(Constant.FRAME_WIDTH, 100, 300, 4);
+                } else if (barrierKindNumber > 250) {
+                    // 可动
+                    getBarrierFromPool(Constant.FRAME_WIDTH, 200, 250, 6);
+                } else {
+                    // 从上往下
+                    getBarrierFromPool(Constant.FRAME_WIDTH, 0, numberTop, 0);
+                    // 从下往上
+                    getBarrierFromPool(Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT-numberDown, numberDown, 2);
+                }
             }
         }
     }
@@ -161,13 +173,18 @@ public class GameBarrierLayer {
     // 下方障碍物高度
     private int numberDown;
     private Random random = new Random();
+    // 生成的障碍物是随机的，因此用此变量控制生成的种类
+    private int barrierKindNumber;
 
     /**
      * 产生两个100-350之间的随机高度
      */
     public void generateRandomHeight() {
-        numberTop = random.nextInt(250) + 100;
-        numberDown = random.nextInt(250) + 100;
+        numberTop = random.nextInt(200) + 100;
+        numberDown = random.nextInt(200) + 100;
+
+        barrierKindNumber = random.nextInt(350);
+
         // 如果障碍物重合，则重新随机
         if (numberTop + numberDown > (int)(Constant.FRAME_HEIGHT) / 1.2) {
             generateRandomHeight();
@@ -176,12 +193,13 @@ public class GameBarrierLayer {
 
     /**
      * 从障碍物对象池中获取对象
+     * 这里的height是设定的障碍物总长度
      */
-    public void getBarrierFromPool(int x, int y, int num, int type) {
+    public void getBarrierFromPool(int x, int y, int height, int type) {
         Barrier top = BarrierPool.getPool();
         top.setX(x);
         top.setY(y);
-        top.setHeight(num);
+        top.setHeight(height);
         top.setType(type);
         top.setVisible(true);
         barriers.add(top);
@@ -208,6 +226,8 @@ public class GameBarrierLayer {
             }
         }
     }
+
+
 
     /**
      * 重新开始游戏，清空障碍物的池子

@@ -1,4 +1,4 @@
-package com.trigger.flappy.opponent;
+package com.others.flappy.opponent;
 
 import java.util.ArrayList;
 import java.util.List;
