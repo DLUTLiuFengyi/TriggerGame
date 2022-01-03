@@ -73,10 +73,9 @@ public class UltraMan extends ObjectBase {
     public void drawSelf(Graphics g) {
         flyLogic();
         g.drawImage(images[state], x, y, null);
-
+//        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
         rect.x = x;
         rect.y = y;
-
         showUltraManStatus(g);
     }
 

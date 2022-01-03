@@ -156,26 +156,54 @@ public class Barrier extends ObjectBase {
      */
     @Override
     public void drawSelf(Graphics g) {
-
-        // 判断是否移除屏幕外
-        if (x < -imgs[1].getWidth()) {
-            this.setX(-imgs[1].getWidth());
-            this.setY(0);
-            System.out.println("屏幕外，删除障碍");
-            barriers.remove(this);
+        // 判断障碍物是否已移动出屏幕左边界
+        if (judgeOutOfScreen()) {
+            return;
         }
 
         // 与光线的碰撞检测
-        for (Beam beam : beams) {
-            if (this.getRect().intersects(beam.getRect())) {
-                this.setX(-500);
-                this.setY(-500);
-                System.out.println("消灭");
-                barriers.remove(this);
-            }
+        if (judgeCollideWithBeam()) {
+            return;
         }
 
         // 与奥特曼的碰撞检测
+        judgeCollideWithUltraMan();
+
+        // 根据type确定需要绘制的类型（从上往下，从下往上，悬空，悬空可动）并进行绘制
+        drawBasedOnType(g);
+    }
+
+    /**
+     * 判断障碍物是否已移动出屏幕左边界（障碍物从右向左移动）
+     */
+    private boolean judgeOutOfScreen() {
+        // 判断是否移除屏幕外
+        if (x < -imgs[1].getWidth()) {
+            System.out.println("屏幕外，删除障碍");
+            barriers.remove(this);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 与光线的碰撞检测
+     */
+    private boolean judgeCollideWithBeam() {
+        for (Beam beam : beams) {
+            if (this.getRect().intersects(beam.getRect())) {
+                System.out.println("被光线消灭");
+                barriers.remove(this);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 与奥特曼的碰撞检测
+     */
+    private boolean judgeCollideWithUltraMan() {
         // 判断奥特曼矩形与障碍物矩形是否相交
         if (!GameUtil.ultraMan.isInvincible()) {
             // 如果奥特曼不是无敌状态
@@ -190,10 +218,17 @@ public class Barrier extends ObjectBase {
                 GameUtil.ultraMan.setInvincible(true);
                 // 回调函数，在新的线程中将无敌时间结束后的奥特曼设为不无敌状态
                 invincibleHook.setNonInvincible(GameUtil.ultraMan);
+                return true;
             }
         }
+        return false;
+    }
 
-        // 根据type确定需要绘制的类型（从上往下，从下往上，悬空，悬空可动）
+    /**
+     * 根据type确定需要绘制的类型（从上往下，从下往上，悬空，悬空可动）
+     * 并进行绘制
+     */
+    private void drawBasedOnType(Graphics g) {
         switch (type) {
             case TYPE_TOP:
                 drawTop(g);
@@ -337,7 +372,7 @@ public class Barrier extends ObjectBase {
         int x1 = this.x;
         int y1 = this.y;
         int w1 = imgs[0].getWidth();
-        // 绘制障碍物矩形
+//        // 绘制障碍物矩形
 //        g.setColor(Color.blue);
 //        g.drawRect(x1, y1, w1, height);
         setRectangle(x1, y1, w1, height);

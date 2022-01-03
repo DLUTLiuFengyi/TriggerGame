@@ -36,7 +36,16 @@ public class Beam extends ObjectBase {
 
     @Override
     public void drawSelf(Graphics g) {
-        super.drawSelf(g);
+        g.drawImage(img, x, y, width, height, null);
+
+//        // 绘制矩形
+//        g.setColor(Color.blue);
+//        g.drawRect(x, y, width, height);
+
+        // 注意：此处需要更新光线对象的矩形坐标！之前射击有bug就是因为这里！
+        rect.x = x;
+        rect.y = y;
+
         // 实现光线的移动
         x += speed;
         if (this.x > Constant.FRAME_WIDTH + this.width) {
