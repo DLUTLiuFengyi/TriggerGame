@@ -26,9 +26,9 @@ Games based on UltraMan Trigger.
 
 ### 画面（斯是陋室，惟吾德馨 :satisfied:）
 
-[游戏过程1](https://github.com/DLUTLiuFengyi/TriggerGame/tree/main/pic/game1.png)
+![游戏过程1](https://github.com/DLUTLiuFengyi/TriggerGame/blob/main/pic/game1.png)
 
-[游戏过程2](https://github.com/DLUTLiuFengyi/TriggerGame/tree/main/pic/game2.png)
+![游戏过程2](https://github.com/DLUTLiuFengyi/TriggerGame/blob/main/pic/game2.png)
 
-[游戏结束](https://github.com/DLUTLiuFengyi/TriggerGame/tree/main/pic/game3.png)
+![游戏结束](https://github.com/DLUTLiuFengyi/TriggerGame/blob/main/pic/game3.png)
 
