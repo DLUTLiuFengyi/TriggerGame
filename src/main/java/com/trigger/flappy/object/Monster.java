@@ -7,17 +7,13 @@ import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.Random;
 
 import static com.trigger.flappy.util.GameUtil.*;
 
-/**
- * 障碍物类
- */
-public class Barrier extends ObjectBase {
+public class Monster extends ObjectBase {
 
-    // 障碍物图片
+    // 怪兽图片
     private static BufferedImage[] imgs;
 
     // 回调函数，用于与奥特曼碰撞后，对奥特曼无敌状态的设置
@@ -27,54 +23,36 @@ public class Barrier extends ObjectBase {
      * 静态代码块，让类加载的时候将三个图片初始化
      */
     static {
-        final int COUNT = 3; // 图片张数
+        final int COUNT = 5; // 图片张数
         imgs = new BufferedImage[COUNT];
         for (int i=0; i<COUNT; i++) {
-            imgs[i] = ImageUtil.loadBufferedImage(Constant.BARRIER_IMG[i]);
+            imgs[i] = ImageUtil.loadBufferedImage(Constant.MONSTER_IMG[i]);
         }
     }
 
-    // 障碍物类型
+    // 怪兽类型
     private int type;
-    // 从上向下
-    private static final int TYPE_TOP = 0;
-    // 从下向上
-    private static final int TYPE_BOTTOM = 2;
-    // 悬浮
-    private static final int TYPE_HOVER = 4;
-    // 可动
-    private static final int TYPE_MOBILE = 6;
+    // 小金牛
+    private static final int ABSOLUTE_DIAVOLO = 1;
+    // 小金人
+    private static final int ABSOLUTE_TARTARUS = 2;
+    // 塞古
+    private static final int SEGMEGER = 3;
+    // 布鲁顿
+    private static final int BULLTON = 4;
+    // 基三
+    private static final int KYRIELOID = 5;
 
     // 指定速度
     private static final int BARRIER_SPEED = 3;
 
-    // 障碍物血量
+    // 怪兽血量
     private int heart;
 
-    // 获得障碍物的宽度和高度
-    private static final int BARRIER_WIDTH = imgs[0].getWidth(); // 悬浮的宽度
-    private static final int BARRIER_HEIGHT = imgs[0].getHeight(); // 悬浮的高度
-    private static final int BARRIER_HEAD_WIDTH = imgs[1].getWidth(); // 向下或向上的宽度
-    private static final int BARRIER_HEAD_HEIGHT = imgs[1].getHeight(); // 向下或向上的高度
-
-    public Barrier() {
+    public Monster() {
         x = Constant.FRAME_WIDTH; // x坐标固定
-        width = BARRIER_WIDTH; // 宽度固定
         speed = BARRIER_SPEED; // 速度固定
-        heart = 10;
-        // y坐标、高度、类型不固定，需要随机生成
-        generateRandomElement();
-        // 生成矩形
-        rect = new Rectangle();
-        invincibleHook = new InvincibleHook();
-    }
-
-    public Barrier(int heart) {
-        x = Constant.FRAME_WIDTH; // x坐标固定
-        width = BARRIER_WIDTH; // 宽度固定
-        speed = BARRIER_SPEED; // 速度固定
-        this.heart = heart;
-        // y坐标、高度、类型不固定，需要随机生成
+        // y坐标、宽度、高度、血量、类型不固定，需要随机生成
         generateRandomElement();
         // 生成矩形
         rect = new Rectangle();
@@ -117,44 +95,55 @@ public class Barrier extends ObjectBase {
      * 随机选取一种类型，然后确定每种类型的对应成员变量的取值
      */
     private void generateRandomElement() {
-        // 四种类型的障碍物（由上往下，由下往上，悬空，悬空可动）
-        int[] randomType = new int[]{0, 2, 4, 6};
+        // 五种类型的怪兽（小金牛，小金人，塞古，布鲁顿，基三）
+        int[] randomType = new int[]{1, 2, 3, 4, 5};
         Random random = new Random();
         // 从四种类型中随机挑一种
-        int typeIndex = random.nextInt(4);
+        int typeIndex = random.nextInt(5);
         int typeSelected = randomType[typeIndex];
-        // 生成一个随机数，作为高度，注意此处的高度尚不是障碍物的最终高度
-        int randomHeight = generateRandomHeight();
+
+        y = generateRandomY(typeSelected);
+
         switch (typeSelected) {
-            case 0: // 从上往下
-                y = 0;
-                type = 0;
-                height = randomHeight;
+            case 1: // 小金牛
+                type = 1;
+                heart = 14;
+                width = imgs[0].getWidth();
+                height = imgs[0].getHeight();
                 break;
-            case 2: // 从下往上
-                y = Constant.FRAME_HEIGHT - randomHeight;
+            case 2: // 小金人
                 type = 2;
-                height = randomHeight;
+                heart = 14;
+                width = imgs[1].getWidth();
+                height = imgs[1].getHeight();
                 break;
-            case 4: // 悬空
-                y = 300;
+            case 3: // 塞古
+                type = 3;
+                heart = 6;
+                width = imgs[2].getWidth();
+                height = imgs[2].getHeight();
+                break;
+            case 4: // 布鲁顿
                 type = 4;
-                height = 500;
+                heart = 6;
+                width = imgs[3].getWidth();
+                height = imgs[3].getHeight();
                 break;
-            case 6: // 悬空可动
-                y = 300;
-                type = 6;
-                height = 500;
+            case 5: // 基三
+                type = 5;
+                heart = 12;
+                width = imgs[4].getWidth();
+                height = imgs[4].getHeight();
                 break;
         }
     }
 
     /**
-     * 根据不同的类型绘制障碍物
+     * 根据不同的类型绘制怪兽
      */
     @Override
     public void drawSelf(Graphics g) {
-        // 判断障碍物是否已移动出屏幕左边界
+        // 判断怪兽是否已移动出屏幕左边界
         if (judgeOutOfScreen()) {
             return;
         }
@@ -169,7 +158,7 @@ public class Barrier extends ObjectBase {
         // 与奥特曼的碰撞检测
         judgeCollideWithUltraMan();
 
-        // 根据type确定需要绘制的类型（从上往下，从下往上，悬空，悬空可动）并进行绘制
+        // 根据type确定需要绘制的怪兽类型，并进行绘制
         drawBasedOnType(g);
     }
 
@@ -178,9 +167,9 @@ public class Barrier extends ObjectBase {
      */
     private boolean judgeOutOfScreen() {
         // 判断是否移除屏幕外
-        if (x < -imgs[1].getWidth()) {
-            System.out.println("屏幕外，删除障碍");
-            barriers.remove(this);
+        if (x < -imgs[type-1].getWidth()) {
+            System.out.println("屏幕外，删除怪兽");
+            monsters.remove(this);
             return true;
         }
         return false;
@@ -197,7 +186,7 @@ public class Barrier extends ObjectBase {
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())) {
                 this.heart = 0;
-                barriers.remove(this);
+                monsters.remove(this);
                 return ;
             }
         }
@@ -207,7 +196,7 @@ public class Barrier extends ObjectBase {
                 // 同时这个光弹对象也需要被删除，避免线程刷新时保留效果，导致障碍物被同一光弹多次攻击
                 simpleShells.remove(simpleShells.get(i));
                 if (this.heart < 1) {
-                    barriers.remove(this);
+                    monsters.remove(this);
                 }
                 return ;
             }
@@ -244,83 +233,32 @@ public class Barrier extends ObjectBase {
      */
     private void drawBasedOnType(Graphics g) {
         switch (type) {
-            case TYPE_TOP:
-                drawTop(g);
+            case ABSOLUTE_DIAVOLO:
+                drawMobile(g, 8, false);
                 break;
-            case TYPE_BOTTOM:
-                drawBottom(g);
+            case ABSOLUTE_TARTARUS:
+                drawMobile(g, 8, false);
                 break;
-            case TYPE_HOVER:
+            case SEGMEGER:
                 drawHover(g);
                 break;
-            case TYPE_MOBILE:
-                drawMobile(g);
+            case BULLTON:
+                drawMobile(g, 25, true);
+                break;
+            case KYRIELOID:
+                drawMobile(g, 10, false);
                 break;
         }
     }
 
     /**
-     * 绘制从上向下的障碍物
-     */
-    private void drawTop(Graphics g) {
-        // 求出所需要的障碍物的块数
-        // height是想设定的障碍物的长度，其减去头部长度，再除以身体每节长度，得到需要的身体节个数
-        int count = (height - BARRIER_HEAD_HEIGHT) / BARRIER_HEIGHT + 1;
-        // 绘制障碍物
-        for (int i=0; i<count; i++) {
-            // 根据高度关系计算y轴坐标即可
-            g.drawImage(imgs[0],x, y+i*BARRIER_HEIGHT, null);
-        }
-        // 绘制障碍物的头
-        int x = this.x - (BARRIER_HEAD_WIDTH-BARRIER_WIDTH)/2;
-        int y = height - BARRIER_HEAD_HEIGHT;
-        g.drawImage(imgs[2], x, y, null);
-
-        this.x -= speed;
-
-        drawRect(g); // 绘制障碍物矩形
-    }
-
-    /**
-     * 绘制从下往上的障碍物
-     */
-    private void drawBottom(Graphics g) {
-        // 求出所需要的障碍物的块数
-        int count = height / BARRIER_HEAD_HEIGHT + 1;
-        // 绘制障碍物
-        for (int i=0; i<count; i++) {
-            // frame的像素点分布为x y从左上角到右下角 递增
-            g.drawImage(imgs[0],x, Constant.FRAME_HEIGHT - i*BARRIER_HEIGHT, null);
-        }
-        // 绘制障碍物的头
-        int x = this.x - (BARRIER_HEAD_WIDTH-BARRIER_WIDTH)/2;
-        int y = Constant.FRAME_HEIGHT - height;
-        // imgs[1]是从下往上的头的图片
-        g.drawImage(imgs[1], x, y, null);
-
-        this.x -= speed;
-
-        drawRect(g); // 绘制障碍物矩形
-    }
-
-    /**
-     * 绘制悬空障碍物
+     * 绘制静止怪兽（相对较弱的不会动）
      */
     private void drawHover(Graphics g) {
-        int count = (height - BARRIER_HEAD_HEIGHT) / BARRIER_HEIGHT + 1;
-        // 绘制头部
-        g.drawImage(imgs[1], x, y, null);
-        // 绘制身躯
-        for (int i=0; i<count; i++) {
-            g.drawImage(imgs[0], x, y + BARRIER_HEAD_HEIGHT + i*BARRIER_HEIGHT, null);
-        }
+        // 绘制
+        g.drawImage(imgs[type-1], x, y, null);
         // 处理障碍物的物理矩形
         drawRect(g);
-        // 绘制尾部
-        // tailY表示尾部开始绘制的y轴高度
-        int tailY = y + height - BARRIER_HEAD_HEIGHT;
-        g.drawImage(imgs[2], x, y, null);
-
         this.x -= speed;
     }
 
@@ -328,56 +266,63 @@ public class Barrier extends ObjectBase {
     private boolean mobile = true;
 
     /**
-     * 绘制可动的障碍物
+     * 绘制可动的怪兽
+     * （这里的可动指的不是基础的从屏幕划过去的移动，而是怪兽自身的移动，所以与speed变量区分开）
+     * @param g
+     * @param movingSpeed 移动速度
+     * @param movingLAndR 是否能左右移动
      */
-    private void drawMobile(Graphics g) {
-        int count = (height - BARRIER_HEAD_HEIGHT) / BARRIER_HEIGHT;
-        // 绘制头部
-        g.drawImage(imgs[1], x, y, null);
-        // 绘制身躯
-        for (int i=0; i<count; i++) {
-            g.drawImage(imgs[0], x, y + BARRIER_HEAD_HEIGHT + i*BARRIER_HEIGHT, null);
-        }
+    private void drawMobile(Graphics g, int movingSpeed, boolean movingLAndR) {
+        // 绘制
+        g.drawImage(imgs[type-1], x, y, null);
+
         // 处理障碍物的物理矩形
         drawRect(g);
-        // 绘制尾部
-        // tailY表示尾部开始绘制的y轴高度
-        int tailY = y + height - BARRIER_HEAD_HEIGHT;
-        g.drawImage(imgs[2], x, y, null);
-
         this.x -= speed;
 
         if (mobile) {
-            y += 10;
-            if (y > (int) Constant.FRAME_HEIGHT - 500) {
+            y += movingSpeed;
+            if (y > (int) Constant.FRAME_HEIGHT - height) {
                 mobile = false;
             }
         } else if (!mobile) {
-            y -= 10;
+            y -= movingSpeed;
             if (y < (int) 100) {
                 mobile = true;
             }
         }
+
+//        if (movingLAndR) {
+//            boolean controlLAndR = true;
+//            if (controlLAndR) {
+//                x += 10;
+//                if (x > (int) Constant.FRAME_WIDTH - width) {
+//                    controlLAndR = false;
+//                }
+//            } else if (!controlLAndR) {
+//                x -= 10;
+//                if (x < (int) 300) {
+//                    controlLAndR = true;
+//                }
+//            }
+//        }
     }
 
     /**
      * 判断何时进行绘制下一组障碍物
      */
     public boolean hasBeenIntoFrame() {
-        return Constant.FRAME_WIDTH - x > 100;
+        return Constant.FRAME_WIDTH - x > 50;
     }
 
     /**
      * 绘制障碍物的碰撞矩形
      */
     public void drawRect(Graphics g) {
-        int x1 = this.x;
-        int y1 = this.y;
-        int w1 = imgs[0].getWidth();
 //        // 绘制障碍物矩形
 //        g.setColor(Color.blue);
 //        g.drawRect(x1, y1, w1, height);
-        setRectangle(x1, y1, w1, height);
+        setRectangle(x, y, width, height);
     }
 
     /**

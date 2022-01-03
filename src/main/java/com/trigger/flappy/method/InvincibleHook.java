@@ -1,6 +1,5 @@
 package com.trigger.flappy.method;
 
-import com.others.flappy.object.Bird;
 import com.trigger.flappy.object.UltraMan;
 
 /**

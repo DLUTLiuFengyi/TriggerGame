@@ -1,10 +1,10 @@
-package com.others.flappy.game;
+package com.old.flappy.game;
 
-import com.others.flappy.method.BirdInvincibleHook;
-import com.others.flappy.object.Barrier;
-import com.others.flappy.util.Constant;
-import com.others.flappy.object.Bird;
-import com.others.flappy.object.BarrierPool;
+import com.old.flappy.method.BirdInvincibleHook;
+import com.old.flappy.object.Barrier;
+import com.old.flappy.util.Constant;
+import com.old.flappy.object.Bird;
+import com.old.flappy.object.BarrierPool;
 
 import java.awt.*;
 import java.io.*;

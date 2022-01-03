@@ -1,8 +1,8 @@
-package com.others.flappy.game;
+package com.old.flappy.game;
 
 import com.image.ImageUtil;
-import com.others.flappy.object.Cloud;
-import com.others.flappy.util.Constant;
+import com.old.flappy.object.Cloud;
+import com.old.flappy.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

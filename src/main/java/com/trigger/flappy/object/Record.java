@@ -23,7 +23,7 @@ public class Record extends ObjectBase {
     private String recordFilePath = Constant.RECORD_FILE_PATH;
 
     public Record() {
-        x = 250;
+        x = 280;
         y = 95;
         this.durationRecord = GameUtil.getDataFromFile(recordFilePath);
     }

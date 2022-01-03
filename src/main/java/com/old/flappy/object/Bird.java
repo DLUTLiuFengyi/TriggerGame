@@ -1,7 +1,7 @@
-package com.others.flappy.object;
+package com.old.flappy.object;
 
 import com.image.ImageUtil;
-import com.others.flappy.util.Constant;
+import com.old.flappy.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

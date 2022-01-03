@@ -1,6 +1,6 @@
-package com.others.flappy.app;
+package com.old.flappy.app;
 
-import com.others.flappy.game.GameFrame;
+import com.old.flappy.game.GameFrame;
 
 public class GameApp {
 

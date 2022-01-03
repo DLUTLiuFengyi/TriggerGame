@@ -1,9 +1,8 @@
-package com.others.flappy.game;
+package com.old.flappy.game;
 
-import com.others.flappy.method.BirdInvincibleHook;
-import com.others.flappy.method.GameExitHook;
-import com.others.flappy.util.Constant;
-import com.others.flappy.object.Bird;
+import com.old.flappy.method.BirdInvincibleHook;
+import com.old.flappy.util.Constant;
+import com.old.flappy.object.Bird;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;

@@ -1,6 +1,6 @@
-package com.others.flappy.method;
+package com.old.flappy.method;
 
-import com.others.flappy.object.Bird;
+import com.old.flappy.object.Bird;
 
 /**
  * 回调函数

@@ -1,6 +1,4 @@
-package com.others.flappy.method;
-
-import com.others.flappy.object.Bird;
+package com.old.flappy.method;
 
 /**
  * 自动退出游戏（未完成）

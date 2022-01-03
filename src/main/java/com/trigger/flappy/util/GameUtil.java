@@ -1,6 +1,6 @@
 package com.trigger.flappy.util;
 
-import com.others.flappy.util.Constant;
+import com.old.flappy.util.Constant;
 import com.trigger.flappy.object.*;
 
 import java.awt.*;
@@ -11,13 +11,19 @@ import java.util.Random;
 
 public class GameUtil {
 
+    // 奥特曼对象
     public static UltraMan ultraMan = new UltraMan();
+
+    // 简易光弹列表
+    public static List<SimpleShell> simpleShells = new ArrayList<>();
 
     // 发射的光线之所以是列表，主要是为了上一条光线还没飞出屏幕，角色能发射第二条光线
     public static List<Beam> beams = new ArrayList<>();
 
     // 障碍物列表
     public static List<Barrier> barriers = new ArrayList<>();
+    // 怪兽列表
+    public static List<Monster> monsters = new ArrayList<>();
 
     /**
      * 获取文件中的数据
@@ -95,7 +101,20 @@ public class GameUtil {
      */
     public static int generateRandomHeight() {
         Random random = new Random();
-        int randomHeight = random.nextInt(200) + 100;
+        int randomHeight = random.nextInt(350) + 200;
+        // 障碍物高度不太低
+        if (randomHeight < 300) {
+            generateRandomHeight();
+        }
         return randomHeight;
+    }
+
+    /**
+     * 产生一个随机y坐标
+     */
+    public static int generateRandomY(int typeSelected) {
+        Random random = new Random();
+        int[] randomY = new int[]{100, 200, 300, 400, 500, 600};
+        return randomY[random.nextInt(6)];
     }
 }

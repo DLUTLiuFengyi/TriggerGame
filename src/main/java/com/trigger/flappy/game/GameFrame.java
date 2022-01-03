@@ -12,8 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.trigger.flappy.util.GameUtil.*;
 
@@ -57,7 +55,7 @@ public class GameFrame extends Frame {
         gameRun.start();
 
         /**
-         * 添加按键监听器，监听小鸟
+         * 添加按键监听器，监听飞行对象
          */
         addKeyListener(new KeyAdapter() {
             @Override
@@ -89,11 +87,14 @@ public class GameFrame extends Frame {
             case KeyEvent.VK_RIGHT:
                 ultraMan.fly(4);
                 break;
-            case KeyEvent.VK_A: // 按下A键，发射光线
+            case KeyEvent.VK_A: // 按下A键，发射简易光弹
+                createSimpleShell();
+                break;
+            case KeyEvent.VK_S: // 按下S键，发射光线
                 createBeam();
                 break;
             case KeyEvent.VK_SPACE: // 按下空格键
-                if (ultraMan.getHeart() < 1) { // 只有小鸟死亡时才生效
+                if (ultraMan.getHeart() < 1) { // 只有生命值归零时才生效
                     restart();
                 }
                 break;
@@ -117,9 +118,6 @@ public class GameFrame extends Frame {
             case KeyEvent.VK_RIGHT:
                 ultraMan.fly(8);
                 break;
-//            case KeyEvent.VK_A:
-//                deleteBeam();
-//                break;
         }
     }
 
@@ -127,8 +125,10 @@ public class GameFrame extends Frame {
      * 重新开始游戏
      */
     public void restart() {
+        simpleShells.clear();
         beams.clear();
-        barriers.clear();
+        monsters.clear();
+//        barriers.clear();
         ultraMan.restart(); // 将奥特曼位置初始化
         timer.restart();
     }
@@ -146,10 +146,18 @@ public class GameFrame extends Frame {
     class GameRun extends Thread {
         @Override
         public void run() {
+            int monsterCount = 0;
             // 不断地绘制
             while (true) {
-                // 不断创建障碍物
-                createBarriers();
+                monsterCount += 1;
+                if (monsterCount % 30 == 0) {
+                    // 不断创建怪兽对象
+                    createMonsters();
+                    if (monsterCount > 3000) {
+                        monsterCount = 1;
+                    }
+                }
+
                 // 通过调用repaint() 让JVM去执行update方法，进行重新的绘制
                 repaint();
                 try {
@@ -180,10 +188,13 @@ public class GameFrame extends Frame {
             timer.drawSelf(graphics);
             record.setCurrentDuration((int)timer.computeDuration());
             record.drawSelf(graphics);
-            for (int i=0; i<barriers.size(); i++) {
-                barriers.get(i).drawSelf(graphics);
+            for (int i=0; i<monsters.size(); i++) {
+                monsters.get(i).drawSelf(graphics);
             }
             ultraMan.drawSelf(graphics);
+            for (int i=0; i<simpleShells.size(); i++) {
+                simpleShells.get(i).drawSelf(graphics);
+            }
             for (int i=0; i<beams.size(); i++) {
                 beams.get(i).drawSelf(graphics);
             }
@@ -197,13 +208,22 @@ public class GameFrame extends Frame {
             g.setColor(Color.red);
             g.setFont(new Font("微软雅黑", 1, 45));
             // 画出
-            g.drawString(over, (int) (com.others.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.others.flappy.util.Constant.FRAME_HEIGHT / 2));
+            g.drawString(over, (int) (com.old.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.old.flappy.util.Constant.FRAME_HEIGHT / 2));
 
             String reset = "Press Space to Restart";
             g.setColor(Color.orange);
             g.setFont(new Font("微软雅黑", 1, 30));
-            g.drawString(reset, (int) (com.others.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.others.flappy.util.Constant.FRAME_HEIGHT / 2) + 50);
+            g.drawString(reset, (int) (com.old.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.old.flappy.util.Constant.FRAME_HEIGHT / 2) + 50);
         }
+    }
+
+    /**
+     * 创建简易光弹对象
+     */
+    public void createSimpleShell() {
+        SimpleShell simpleShell = new SimpleShell(ImageUtil.loadBufferedImage(Constant.SIMPLE_SHELL_IMG),
+                ultraMan.getX()+80, ultraMan.getY()+30, 45, 45, 15);
+        simpleShells.add(simpleShell);
     }
 
     /**
@@ -211,7 +231,7 @@ public class GameFrame extends Frame {
      */
     public void createBeam() {
         Beam beam = new Beam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
-                ultraMan.getX()+80, ultraMan.getY()+30, 300, 50, 10);
+                ultraMan.getX()+80, ultraMan.getY()+30, 750, 50, 10);
         beams.add(beam);
     }
 
@@ -231,5 +251,25 @@ public class GameFrame extends Frame {
                 barriers.add(barrier);
             }
         }
+    }
+
+    /**
+     * 创建怪兽对象
+     */
+    public void createMonsters() {
+//        if (monsters.size() < 1) {
+//            Monster monster = new Monster();
+//            monsters.add(monster);
+//        } else {
+//            // 判断最后一个怪兽是否完全进入屏幕内（什么时候绘制下一个怪兽）
+//            Monster last = monsters.get(monsters.size()-1);
+//            if (last.hasBeenIntoFrame()) {
+//                // 最后一个怪兽已进入屏幕内，则创建新的怪兽
+//                Monster monster = new Monster();
+//                monsters.add(monster);
+//            }
+//        }
+        Monster monster = new Monster();
+        monsters.add(monster);
     }
 }

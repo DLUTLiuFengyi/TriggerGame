@@ -1,4 +1,4 @@
-package com.others.flappy.object;
+package com.old.flappy.object;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

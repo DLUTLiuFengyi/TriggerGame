@@ -1,4 +1,4 @@
-package com.others.flappy.game;
+package com.old.flappy.game;
 
 /**
  * 游戏计时器，记录游戏时长

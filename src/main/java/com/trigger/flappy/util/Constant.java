@@ -27,7 +27,11 @@ public class Constant {
     public static final String[] BARRIER_IMG = {"img/barrier.png", "img/barrier_up.png", "img/barrier_down.png"};
 
     // 怪兽图片
-    public static final String[] MONSTER_IMG = {"img/monster1.png", "img/monster2.png", "img/monster3.png"};
+    public static final String[] MONSTER_IMG = {"img/monster1.png", "img/monster2.png", "img/monster3.png",
+            "img/monster4.png", "img/monster5.png"};
+
+    // 简易光弹图片
+    public static final String SIMPLE_SHELL_IMG = "img/simple_shell.png";
 
     // 光线图片
     public static final String BEAM_IMG = "img/beam.png";
