@@ -23,6 +23,13 @@ public class Constant {
 
     public static final String RECORD_FILE_PATH = "game_file/record.txt";
 
+    // 奥特曼图片
+    public static final String[] ULTRAMAN_IMG = {"img/trigger_sky.png", "img/trigger_sky.png",
+            "img/trigger_power.png", "img/trigger_power.png",
+            "img/trigger_normal.png", "img/trigger_normal.png",
+            "img/ribut.png"
+    };
+
     // 障碍物图片
     public static final String[] BARRIER_IMG = {"img/barrier.png", "img/barrier_up.png", "img/barrier_down.png"};
 

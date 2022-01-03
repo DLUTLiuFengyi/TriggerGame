@@ -88,9 +88,11 @@ public class GameFrame extends Frame {
                 ultraMan.fly(4);
                 break;
             case KeyEvent.VK_A: // 按下A键，发射简易光弹
+                ultraMan.fly(6);
                 createSimpleShell();
                 break;
             case KeyEvent.VK_S: // 按下S键，发射光线
+                ultraMan.fly(7);
                 createBeam();
                 break;
             case KeyEvent.VK_SPACE: // 按下空格键
@@ -110,13 +112,13 @@ public class GameFrame extends Frame {
                 ultraMan.fly(5);
                 break;
             case KeyEvent.VK_DOWN:
-                ultraMan.fly(6);
+                ultraMan.fly(5);
                 break;
             case KeyEvent.VK_LEFT:
-                ultraMan.fly(7);
+                ultraMan.fly(5);
                 break;
             case KeyEvent.VK_RIGHT:
-                ultraMan.fly(8);
+                ultraMan.fly(5);
                 break;
         }
     }

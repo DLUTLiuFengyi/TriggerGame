@@ -1,7 +1,7 @@
 package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
-import com.old.flappy.util.Constant;
+import com.trigger.flappy.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,20 +17,21 @@ public class UltraMan extends ObjectBase {
     private BufferedImage[] images;
 
     // 图片数量
-    private static final int BIRD_IMG_COUNT = 6;
+    private static final int ULTRAMAN_IMG_COUNT = 7;
 
     // 0初始 1上升 2下降 3向左 4向右 5静止
-    private static final int STATE_NORMAL = 0; // 初始
     private static final int STATE_UP = 1; // 上升
     private static final int STATE_DOWN = 2; // 下降
     private static final int STATE_LEFT = 3; // 向左
     private static final int STATE_RIGHT = 4; // 向右
     private static final int STATE_STILL = 5; // 静止
+    private static final int STATE_SIMPLE_SHELL = 6; //发射光弹
+    private static final int STATE_BEAM = 7; // 发射光线
 
     private static final int FLYING_SPEED = 8;
 
     // 奥特曼状态
-    private int state;
+    private int state = STATE_STILL;
 
     // 奥特曼生命值
     private final static int FULL_HEART = 5;
@@ -55,24 +56,24 @@ public class UltraMan extends ObjectBase {
     }
 
     public UltraMan() {
-        images = new BufferedImage[BIRD_IMG_COUNT];
-        for (int i=0; i<BIRD_IMG_COUNT; i++) {
-            images[i] = ImageUtil.loadBufferedImage(Constant.BIRD_IMG[i]);
+        images = new BufferedImage[ULTRAMAN_IMG_COUNT];
+        for (int i=0; i<ULTRAMAN_IMG_COUNT; i++) {
+            images[i] = ImageUtil.loadBufferedImage(Constant.ULTRAMAN_IMG[i]);
         }
 
         x = 200;
         y = 200;
         speed = FLYING_SPEED;
 
-        int w = images[0].getWidth();
-        int h = images[0].getHeight();
+        int w = images[state-1].getWidth();
+        int h = images[state-1].getHeight();
         rect = new Rectangle(w, h);
     }
 
     @Override
     public void drawSelf(Graphics g) {
         flyLogic();
-        g.drawImage(images[state], x, y, null);
+        g.drawImage(images[state-1], x, y, null);
 //        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
         rect.x = x;
         rect.y = y;
@@ -128,13 +129,10 @@ public class UltraMan extends ObjectBase {
                 state = STATE_STILL;
                 break;
             case 6:
-                state = STATE_STILL;
+                state = STATE_SIMPLE_SHELL;
                 break;
             case 7:
-                state = STATE_STILL;
-                break;
-            case 8:
-                state = STATE_STILL;
+                state = STATE_BEAM;
                 break;
         }
     }
