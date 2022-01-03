@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
+ * 奥特曼类
  *
+ * author: lfy
  */
 public class UltraMan extends ObjectBase {
 
@@ -24,6 +26,8 @@ public class UltraMan extends ObjectBase {
     private static final int STATE_LEFT = 3; // 向左
     private static final int STATE_RIGHT = 4; // 向右
     private static final int STATE_STILL = 5; // 静止
+
+    private static final int FLYING_SPEED = 8;
 
     // 奥特曼状态
     private int state;
@@ -58,7 +62,7 @@ public class UltraMan extends ObjectBase {
 
         x = 200;
         y = 200;
-        speed = 5;
+        speed = FLYING_SPEED;
 
         int w = images[0].getWidth();
         int h = images[0].getHeight();
@@ -89,8 +93,8 @@ public class UltraMan extends ObjectBase {
                 break;
             case STATE_DOWN: // 向下
                 y += speed;
-                if (y > Constant.FRAME_HEIGHT - 182) { // 保证小鸟不落出屏幕
-                    y = Constant.FRAME_HEIGHT - 182;
+                if (y > Constant.FRAME_HEIGHT - images[0].getHeight()) { // 保证小鸟不落出屏幕
+                    y = Constant.FRAME_HEIGHT- images[0].getHeight();
                 }
                 break;
             case STATE_LEFT: // 向左

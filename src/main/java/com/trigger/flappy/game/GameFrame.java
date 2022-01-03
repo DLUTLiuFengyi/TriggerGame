@@ -1,12 +1,9 @@
 package com.trigger.flappy.game;
 
 import com.image.ImageUtil;
-import com.others.flappy.game.GameBackground;
-import com.others.flappy.game.GameFrontGround;
 import com.trigger.flappy.method.InvincibleHook;
-import com.trigger.flappy.object.UltraMan;
+import com.trigger.flappy.object.*;
 import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.object.Beam;
 import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
@@ -18,15 +15,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.trigger.flappy.util.GameUtil.beams;
+import static com.trigger.flappy.util.GameUtil.*;
 
 public class GameFrame extends Frame {
 
-    private UltraMan ultraMan;
-
-    private GameBackground gameBackground;
-    private GameFrontGround gameFrontGround;
-    private GameBarrierLayer gameBarrierLayer;
+    private Background background;
+    private Timer timer;
+    private Record record;
 
     private BufferedImage bufferedImage = new BufferedImage(
             Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
@@ -132,8 +127,10 @@ public class GameFrame extends Frame {
      * 重新开始游戏
      */
     public void restart() {
-        gameBarrierLayer.restart(); // 清空障碍物对象列表
-        ultraMan.restart(); // 将小鸟位置初始化
+        beams.clear();
+        barriers.clear();
+        ultraMan.restart(); // 将奥特曼位置初始化
+        timer.restart();
     }
 
     /**
@@ -141,9 +138,9 @@ public class GameFrame extends Frame {
      */
     public void initGame(InvincibleHook invincibleHook) {
         ultraMan = new UltraMan();
-        gameBackground = new GameBackground();
-        gameFrontGround = new GameFrontGround();
-        gameBarrierLayer = new GameBarrierLayer(invincibleHook);
+        background = new Background();
+        timer = new Timer();
+        record = new Record();
     }
 
     class GameRun extends Thread {
@@ -151,6 +148,8 @@ public class GameFrame extends Frame {
         public void run() {
             // 不断地绘制
             while (true) {
+                // 不断创建障碍物
+                createBarriers();
                 // 通过调用repaint() 让JVM去执行update方法，进行重新的绘制
                 repaint();
                 try {
@@ -177,20 +176,20 @@ public class GameFrame extends Frame {
              */
             // 得到缓存图片的画笔
             Graphics graphics = bufferedImage.getGraphics();
-            gameBackground.draw(graphics);
-            gameFrontGround.draw(graphics);
-            gameBarrierLayer.draw(graphics, ultraMan, beams);
+            background.drawSelf(graphics);
+            timer.drawSelf(graphics);
+            record.setCurrentDuration((int)timer.computeDuration());
+            record.drawSelf(graphics);
+            for (int i=0; i<barriers.size(); i++) {
+                barriers.get(i).drawSelf(graphics);
+            }
             ultraMan.drawSelf(graphics);
-            // 绘制光线
             for (int i=0; i<beams.size(); i++) {
                 beams.get(i).drawSelf(graphics);
             }
-            deleteBeamFromList();
-//            if (beam != null) {
-//                beam.drawSelf(graphics);
-//            }
             // 一次性将图片绘制到屏幕中
             g.drawImage(bufferedImage, 0, 0, null);
+
         } else {
             // 否则 游戏结束
             String over = "Game Over";
@@ -217,26 +216,20 @@ public class GameFrame extends Frame {
     }
 
     /**
-     * 判断光线对象是否飞出屏幕外，如果飞出，则将其删除
+     * 创建障碍物
      */
-    public void deleteBeamFromList() {
-        for (int i=0; i<beams.size(); i++) {
-            if (beams.get(i).getX() > Constant.FRAME_WIDTH + beams.get(i).getWidth()) {
-                System.out.println("删除序号" + i + "的光线对象");
-                beams.remove(beams.get(i));
+    public void createBarriers() {
+        if (barriers.size() < 1) {
+            Barrier barrier = new Barrier();
+            barriers.add(barrier);
+        } else {
+            // 判断最后一个障碍物是否完全进入屏幕内（什么时候绘制下一组障碍物）
+            Barrier last = barriers.get(GameUtil.barriers.size()-1);
+            if (last.hasBeenIntoFrame()) {
+                // 最后一个障碍物已进入屏幕内，则创建新的障碍物
+                Barrier barrier = new Barrier();
+                barriers.add(barrier);
             }
         }
-    }
-
-    /**
-     * 创建光线对象（不断发光线）
-     */
-    public void createBeamList() {
-        Beam beam = new Beam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
-                ultraMan.getX()+80, ultraMan.getY()+30, 500, 50, 10);
-        beams.add(beam);
-//        // 当前列表中光线对象数量
-//        int beamListLen = GameUtil.beamList.size();
-//        GameUtil.objList.add(GameUtil.beamList.get(beamListLen - 1));
     }
 }

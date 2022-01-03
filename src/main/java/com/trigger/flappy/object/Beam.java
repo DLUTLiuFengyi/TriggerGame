@@ -1,7 +1,12 @@
 package com.trigger.flappy.object;
 
+import com.trigger.flappy.util.Constant;
+import com.trigger.flappy.util.GameUtil;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
+import static com.trigger.flappy.util.GameUtil.beams;
 
 /**
  * 光线
@@ -20,7 +25,13 @@ public class Beam extends ObjectBase {
     }
 
     public Beam(BufferedImage img, int x, int y, int width, int height, int speed) {
-        super(img, x, y, width, height, speed);
+        this.img = img;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.speed = speed;
+        rect = new Rectangle(width, height);
     }
 
     @Override
@@ -28,5 +39,9 @@ public class Beam extends ObjectBase {
         super.drawSelf(g);
         // 实现光线的移动
         x += speed;
+        if (this.x > Constant.FRAME_WIDTH + this.width) {
+            System.out.println("光线出界，删除");
+            beams.remove(this);
+        }
     }
 }

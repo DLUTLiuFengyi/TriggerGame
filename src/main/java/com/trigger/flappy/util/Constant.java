@@ -1,5 +1,7 @@
 package com.trigger.flappy.util;
 
+import java.awt.*;
+
 public class Constant {
 
     // 窗口大小
@@ -13,6 +15,14 @@ public class Constant {
     public static final int FRAME_X = 200;
     public static final int FRAME_Y = 200;
 
+    // 背景图片路径
+    public static final String BK_IMG_OATH = "img/background1.png";
+
+    // 游戏背景颜色
+    public static final Color BK_COLOR = new Color(0xEA7642);
+
+    public static final String RECORD_FILE_PATH = "game_file/record.txt";
+
     // 障碍物图片
     public static final String[] BARRIER_IMG = {"img/barrier.png", "img/barrier_up.png", "img/barrier_down.png"};
 
@@ -21,4 +31,7 @@ public class Constant {
 
     // 光线图片
     public static final String BEAM_IMG = "img/beam.png";
+
+    // 飞机图片
+    public static final String[] FIGHTER_IMG = {"img/cloud1.png", "img/cloud2.png"};
 }
