@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
 
+import static com.trigger.flappy.util.GameEntities.*;
 import static com.trigger.flappy.util.GameUtil.*;
 
 /**
@@ -219,19 +220,19 @@ public class Barrier extends ObjectBase {
      */
     private boolean judgeCollideWithUltraMan() {
         // 判断奥特曼矩形与障碍物矩形是否相交
-        if (!GameUtil.ultraMan.isInvincible()) {
+        if (! ultraMan.isInvincible()) {
             // 如果奥特曼不是无敌状态
-            if (this.getRect().intersects(GameUtil.ultraMan.getRect())) {
+            if (this.getRect().intersects(ultraMan.getRect())) {
                 // 生命值-1
-                GameUtil.ultraMan.setHeart(GameUtil.ultraMan.getHeart() - 1);
+                ultraMan.setHeart(ultraMan.getHeart() - 1);
                 System.out.println("撞上啦");
-                if (GameUtil.ultraMan.getHeart() < 0) {
+                if (ultraMan.getHeart() < 0) {
                     System.out.println("生命值耗尽");
                 }
                 // 碰到障碍物后，奥特曼短时间内无敌，以避免一直卡在一个障碍物上
-                GameUtil.ultraMan.setInvincible(true);
+                ultraMan.setInvincible(true);
                 // 回调函数，在新的线程中将无敌时间结束后的奥特曼设为不无敌状态
-                invincibleHook.setNonInvincible(GameUtil.ultraMan);
+                invincibleHook.setNonInvincible(ultraMan);
                 return true;
             }
         }

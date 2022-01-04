@@ -6,10 +6,10 @@ import com.trigger.flappy.util.GameUtil;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameUtil.beams;
+import static com.trigger.flappy.util.GameEntities.beams;
 
 /**
- * 光线
+ * 光线类
  *
  * author: lfy
  */
@@ -34,6 +34,9 @@ public class Beam extends ObjectBase {
         rect = new Rectangle(width, height);
     }
 
+    /**
+     * 画出光线
+     */
     @Override
     public void drawSelf(Graphics g) {
         g.drawImage(img, x, y, width, height, null);

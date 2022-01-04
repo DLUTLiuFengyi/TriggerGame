@@ -13,7 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameUtil.*;
+import static com.trigger.flappy.util.GameEntities.*;
 
 public class GameFrame extends Frame {
 
@@ -46,7 +46,10 @@ public class GameFrame extends Frame {
             }
         });
 
-        initGame(new InvincibleHook());
+        /**
+         * 将游戏对象进行初始化
+         */
+        initGame();
 
         /**
          * 用于刷新图片的线程
@@ -132,19 +135,22 @@ public class GameFrame extends Frame {
         monsters.clear();
 //        barriers.clear();
         ultraMan.restart(); // 将奥特曼位置初始化
-        timer.restart();
+        timer.restart(); // 时钟重置
     }
 
     /**
      * 对游戏中的对象进行实例化
      */
-    public void initGame(InvincibleHook invincibleHook) {
+    public void initGame() {
         ultraMan = new UltraMan();
         background = new Background();
         timer = new Timer();
         record = new Record();
     }
 
+    /**
+     * 执行游戏的线程，不断地将游戏对象绘制到屏幕画布上
+     */
     class GameRun extends Thread {
         @Override
         public void run() {
@@ -152,7 +158,7 @@ public class GameFrame extends Frame {
             // 不断地绘制
             while (true) {
                 monsterCount += 1;
-                if (monsterCount % 30 == 0) {
+                if (monsterCount % 30 == 0) { // 控制怪兽对象生成速度
                     // 不断创建怪兽对象
                     createMonsters();
                     if (monsterCount > 3000) {
@@ -160,7 +166,7 @@ public class GameFrame extends Frame {
                     }
                 }
 
-                // 通过调用repaint() 让JVM去执行update方法，进行重新的绘制
+                // 通过调用repaint() 让jvm去执行update方法，进行重新的绘制
                 repaint();
                 try {
                     // 每30ms调用一次
@@ -184,23 +190,28 @@ public class GameFrame extends Frame {
              * 思路：先创建一个空的图片，把所有组件先绘制在空的图片上
              * 然后把绘制好的图片一次性绘制到主窗口中
              */
-            // 得到缓存图片的画笔
+            // 得到缓存画布的画笔
             Graphics graphics = bufferedImage.getGraphics();
+            // 将相关游戏对象先画到缓存画布上
             background.drawSelf(graphics);
             timer.drawSelf(graphics);
             record.setCurrentDuration((int)timer.computeDuration());
             record.drawSelf(graphics);
+            // 怪兽绘制
             for (int i=0; i<monsters.size(); i++) {
                 monsters.get(i).drawSelf(graphics);
             }
+            // 奥特曼绘制
             ultraMan.drawSelf(graphics);
+            // 光弹绘制
             for (int i=0; i<simpleShells.size(); i++) {
                 simpleShells.get(i).drawSelf(graphics);
             }
+            // 光线绘制
             for (int i=0; i<beams.size(); i++) {
                 beams.get(i).drawSelf(graphics);
             }
-            // 一次性将图片绘制到屏幕中
+            // 一次性将所有游戏对象绘制到屏幕中
             g.drawImage(bufferedImage, 0, 0, null);
 
         } else {
@@ -246,7 +257,7 @@ public class GameFrame extends Frame {
             barriers.add(barrier);
         } else {
             // 判断最后一个障碍物是否完全进入屏幕内（什么时候绘制下一组障碍物）
-            Barrier last = barriers.get(GameUtil.barriers.size()-1);
+            Barrier last = barriers.get(barriers.size()-1);
             if (last.hasBeenIntoFrame()) {
                 // 最后一个障碍物已进入屏幕内，则创建新的障碍物
                 Barrier barrier = new Barrier();
@@ -271,7 +282,7 @@ public class GameFrame extends Frame {
 //                monsters.add(monster);
 //            }
 //        }
-        Monster monster = new Monster();
+        Monster monster = new Monster(new InvincibleHook());
         monsters.add(monster);
     }
 }

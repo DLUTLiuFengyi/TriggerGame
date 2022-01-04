@@ -158,7 +158,7 @@ public class UltraMan extends ObjectBase {
     }
 
     /**
-     * 重新开始游戏，重置奥特曼的位置
+     * 重新开始游戏，重置奥特曼的位置，血量补满
      */
     public void restart() {
         setHeart(5);

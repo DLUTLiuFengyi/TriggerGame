@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
  * 飞机对象
  *
  * author: lfy
+ *
+ * TODO: 目前飞机只单纯充当背景图片，后续应该把其作为召唤技能，作为AI辅助攻击敌人
  */
 public class Fighter extends ObjectBase {
 

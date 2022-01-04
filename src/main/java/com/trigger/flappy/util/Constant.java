@@ -2,6 +2,9 @@ package com.trigger.flappy.util;
 
 import java.awt.*;
 
+/**
+ * 定义常规的游戏常量
+ */
 public class Constant {
 
     // 窗口大小

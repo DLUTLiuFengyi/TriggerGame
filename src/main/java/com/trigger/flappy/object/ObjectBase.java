@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
  */
 public class ObjectBase {
 
-    BufferedImage img;
-    int x, y;
-    int width, height;
-    int speed;
-    Rectangle rect;
+    BufferedImage img; // 游戏对象的图片
+    int x, y; // x与y坐标
+    int width, height; // 宽度和高度
+    int speed; // 速度（相对屏幕的移动速度）
+    Rectangle rect; // 游戏对象的矩形（用于碰撞检测）
 
     public BufferedImage getImg() {
         return img;
@@ -86,6 +86,10 @@ public class ObjectBase {
         rect = new Rectangle(width, height);
     }
 
+    /**
+     * 游戏对象将自己绘制到画布上的函数
+     * 继承此基类的类需要重载这个方法
+     */
     public void drawSelf(Graphics g) {
         g.drawImage(img, x, y, width, height, null);
     }

@@ -96,7 +96,6 @@ public class Background extends ObjectBase {
             if (fighter.isOutOfFrame()) {
                 fighters.remove(i);
                 i--;
-                System.out.println("飞机实例" + fighter + "被移除");
             }
         }
         // 绘制

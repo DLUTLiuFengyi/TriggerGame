@@ -9,8 +9,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import static com.trigger.flappy.util.GameEntities.*;
 import static com.trigger.flappy.util.GameUtil.*;
 
+/**
+ * 怪兽对类
+ *
+ * author: lfy
+ */
 public class Monster extends ObjectBase {
 
     // 怪兽图片
@@ -20,7 +26,7 @@ public class Monster extends ObjectBase {
     private InvincibleHook invincibleHook;
 
     /**
-     * 静态代码块，让类加载的时候将三个图片初始化
+     * 静态代码块，让类加载的时候将怪兽的图片加载到内存中
      */
     static {
         final int COUNT = 5; // 图片张数
@@ -49,14 +55,17 @@ public class Monster extends ObjectBase {
     // 怪兽血量
     private int heart;
 
-    public Monster() {
-        x = Constant.FRAME_WIDTH; // x坐标固定
-        speed = BARRIER_SPEED; // 速度固定
+    public Monster(InvincibleHook invincibleHook) {
+        // 新的怪兽对象固定从窗口最右端开始生成
+        x = Constant.FRAME_WIDTH;
+        // 速度固定
+        speed = BARRIER_SPEED;
         // y坐标、宽度、高度、血量、类型不固定，需要随机生成
         generateRandomElement();
         // 生成矩形
         rect = new Rectangle();
-        invincibleHook = new InvincibleHook();
+        // 一个用于奥特曼与怪兽碰撞后无敌状态相关设置的回调函数
+        this.invincibleHook = invincibleHook;
     }
 
     public int getX() {
@@ -208,19 +217,19 @@ public class Monster extends ObjectBase {
      */
     private boolean judgeCollideWithUltraMan() {
         // 判断奥特曼矩形与障碍物矩形是否相交
-        if (!GameUtil.ultraMan.isInvincible()) {
+        if (!ultraMan.isInvincible()) {
             // 如果奥特曼不是无敌状态
-            if (this.getRect().intersects(GameUtil.ultraMan.getRect())) {
+            if (this.getRect().intersects(ultraMan.getRect())) {
                 // 生命值-1
-                GameUtil.ultraMan.setHeart(GameUtil.ultraMan.getHeart() - 1);
+                ultraMan.setHeart(ultraMan.getHeart() - 1);
                 System.out.println("撞上啦");
-                if (GameUtil.ultraMan.getHeart() < 0) {
+                if (ultraMan.getHeart() < 0) {
                     System.out.println("生命值耗尽");
                 }
                 // 碰到障碍物后，奥特曼短时间内无敌，以避免一直卡在一个障碍物上
-                GameUtil.ultraMan.setInvincible(true);
+                ultraMan.setInvincible(true);
                 // 回调函数，在新的线程中将无敌时间结束后的奥特曼设为不无敌状态
-                invincibleHook.setNonInvincible(GameUtil.ultraMan);
+                invincibleHook.setNonInvincible(ultraMan);
                 return true;
             }
         }
@@ -262,7 +271,7 @@ public class Monster extends ObjectBase {
         this.x -= speed;
     }
 
-    // 是否可动的状态
+    // 该状态用来控制可动对象的上下移动
     private boolean mobile = true;
 
     /**

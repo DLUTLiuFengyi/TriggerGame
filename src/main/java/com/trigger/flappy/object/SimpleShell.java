@@ -5,8 +5,13 @@ import com.trigger.flappy.util.Constant;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameUtil.simpleShells;
+import static com.trigger.flappy.util.GameEntities.simpleShells;
 
+/**
+ * 简易光弹类，平A技能
+ *
+ * author: lfy
+ */
 public class SimpleShell extends ObjectBase {
 
     @Override
