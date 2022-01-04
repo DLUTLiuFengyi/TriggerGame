@@ -55,15 +55,22 @@ public class Record extends ObjectBase {
     @Override
     public void drawSelf(Graphics g) {
         // 与存储在游戏文件record.txt中的最高时间记录作比较
-        if (currentDuration <= durationRecord) {
-            g.setColor(Color.white);
-            g.setFont(new Font("微软雅黑", 1, 25));
-            g.drawString("Best scores: " + durationRecord, x, y);
-        } else {
-            GameUtil.setDataIntoFile(String.valueOf(currentDuration), recordFilePath);
-            g.setColor(Color.white);
-            g.setFont(new Font("微软雅黑", 1, 25));
-            g.drawString("Best scores: " + GameUtil.getDataFromFile(recordFilePath), x, y);
+        if (currentDuration > durationRecord) {
+            durationRecord = currentDuration;
+            GameUtil.setDataIntoFile(String.valueOf(durationRecord), recordFilePath);
         }
+        g.setColor(Color.white);
+        g.setFont(new Font("微软雅黑", 1, 25));
+        g.drawString("Best scores: " + durationRecord, x, y);
+//        if (currentDuration <= durationRecord) {
+//            g.setColor(Color.white);
+//            g.setFont(new Font("微软雅黑", 1, 25));
+//            g.drawString("Best scores: " + durationRecord, x, y);
+//        } else {
+//            GameUtil.setDataIntoFile(String.valueOf(currentDuration), recordFilePath);
+//            g.setColor(Color.white);
+//            g.setFont(new Font("微软雅黑", 1, 25));
+//            g.drawString("Best scores: " + GameUtil.getDataFromFile(recordFilePath), x, y);
+//        }
     }
 }
