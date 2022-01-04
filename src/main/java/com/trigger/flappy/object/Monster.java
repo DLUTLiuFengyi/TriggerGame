@@ -185,8 +185,8 @@ public class Monster extends ObjectBase {
     private boolean judgeOutOfScreen() {
         // 判断是否移除屏幕外
         if (x < -imgs[type-1].getWidth()) {
-            System.out.println("屏幕外，得分-50");
-            scoreCounter.subScore(50);
+            System.out.println("屏幕外，得分-5");
+            scoreCounter.subScore(5);
             monsters.remove(this);
             return true;
         }

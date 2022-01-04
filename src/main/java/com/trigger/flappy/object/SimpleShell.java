@@ -14,6 +14,12 @@ import static com.trigger.flappy.util.GameEntities.simpleShells;
  */
 public class SimpleShell extends ObjectBase {
 
+    private static int manaValue = 4; // 消耗的MP量
+
+    public static int getManaValue() {
+        return manaValue;
+    }
+
     @Override
     public BufferedImage getImg() {
         return super.getImg();

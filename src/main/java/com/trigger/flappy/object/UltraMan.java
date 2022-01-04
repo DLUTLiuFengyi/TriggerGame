@@ -6,6 +6,8 @@ import com.trigger.flappy.util.Constant;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static com.trigger.flappy.util.GameEntities.monsterCount;
+
 /**
  * 奥特曼类
  *
@@ -36,6 +38,11 @@ public class UltraMan extends ObjectBase {
     // 奥特曼生命值
     private final static int FULL_HEART = 5;
     private int heart = FULL_HEART; // 初始有5颗♥
+
+    // 奥特曼蓝量
+    private final static int FULL_MANA = 100;
+    private int mana = FULL_MANA; //
+
     private boolean invincible = false;
     private double invincibleSeconds = 1; // 无敌时间 默认为1秒
 
@@ -55,6 +62,21 @@ public class UltraMan extends ObjectBase {
         this.invincible = invincible;
     }
 
+    public int getMana() {
+        return this.mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    /**
+     * 使用技能，消耗MP
+     */
+    public void subMana(int value) {
+        this.mana -= value;
+    }
+
     public UltraMan() {
         images = new BufferedImage[ULTRAMAN_IMG_COUNT];
         for (int i=0; i<ULTRAMAN_IMG_COUNT; i++) {
@@ -72,7 +94,10 @@ public class UltraMan extends ObjectBase {
 
     @Override
     public void drawSelf(Graphics g) {
-        flyLogic();
+        // 操作逻辑
+        actionLogic();
+        // 恢复MP逻辑
+        recoverMana();
         g.drawImage(images[state-1], x, y, null);
 //        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
         rect.x = x;
@@ -83,7 +108,7 @@ public class UltraMan extends ObjectBase {
     /**
      * 根据状态，进行实际的位置变更
      */
-    public void flyLogic() {
+    public void actionLogic() {
         switch (state) {
             case STATE_UP: // 向上
                 y -= speed;
@@ -111,7 +136,7 @@ public class UltraMan extends ObjectBase {
     /**
      * 接收键盘的操纵信息，进行状态的设置
      */
-    public void fly(int fly) {
+    public void action(int fly) {
         switch (fly) {
             case 1:
                 state = STATE_UP;
@@ -138,7 +163,20 @@ public class UltraMan extends ObjectBase {
     }
 
     /**
-     * 显示奥特曼当前信息（血量）
+     * 恢复MP的逻辑
+     * 随时间自动恢复
+     */
+    private void recoverMana() {
+        if (this.mana > 99) {
+            return;
+        }
+        if (monsterCount % 2 == 0) {
+            this.mana += 1;
+        }
+    }
+
+    /**
+     * 显示奥特曼当前信息（血量和蓝量）
      */
     private void showUltraManStatus(Graphics g) {
         /**
@@ -147,14 +185,24 @@ public class UltraMan extends ObjectBase {
         // 绘制血条信息
         g.setColor(Color.white);
         g.setFont(new Font("微软雅黑", 1, 25));
-        g.drawString("Blood: ", 30, 130);
+        g.drawString("HP ", 30, 130);
         // 绘制作为血条背景的矩形
         g.setColor(Color.white);
-        g.fillRect(125, 115, 150, 15);
+        g.fillRect(75, 115, 100, 15);
         // 绘制血量
         g.setColor(Color.red);
         // 血量矩形的宽度是血量比例
-        g.fillRect(125, 115, this.heart * 150 / FULL_HEART, 15);
+        g.fillRect(75, 115, this.heart * 100 / FULL_HEART, 15);
+        /**
+         * 绘制蓝条
+         */
+        g.setColor(Color.white);
+        g.setFont(new Font("微软雅黑", 1, 25));
+        g.drawString("MP ", 185, 130);
+        g.setColor(Color.white);
+        g.fillRect(238, 115, 100, 15);
+        g.setColor(Color.blue);
+        g.fillRect(238, 115, this.mana * 100 / FULL_MANA, 15);
     }
 
     /**
@@ -162,6 +210,7 @@ public class UltraMan extends ObjectBase {
      */
     public void restart() {
         setHeart(5);
+        setMana(100);
         x = 200;
         y = 200;
     }

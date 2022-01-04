@@ -9,11 +9,17 @@ import java.awt.image.BufferedImage;
 import static com.trigger.flappy.util.GameEntities.beams;
 
 /**
- * 光线类
+ * 超-必杀技
  *
  * author: lfy
  */
 public class NirvanaBeam extends ObjectBase {
+
+    private static int manaValue = 50; // 消耗的MP量
+
+    public static int getManaValue() {
+        return manaValue;
+    }
 
     @Override
     public BufferedImage getImg() {

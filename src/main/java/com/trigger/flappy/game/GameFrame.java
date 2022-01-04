@@ -4,7 +4,6 @@ import com.image.ImageUtil;
 import com.trigger.flappy.method.InvincibleHook;
 import com.trigger.flappy.object.*;
 import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -79,24 +78,24 @@ public class GameFrame extends Frame {
     private void add(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 按下方向键上键
-                ultraMan.fly(1);
+                ultraMan.action(1);
                 break;
             case KeyEvent.VK_DOWN:
-                ultraMan.fly(2);
+                ultraMan.action(2);
                 break;
             case KeyEvent.VK_LEFT:
-                ultraMan.fly(3);
+                ultraMan.action(3);
                 break;
             case KeyEvent.VK_RIGHT:
-                ultraMan.fly(4);
+                ultraMan.action(4);
                 break;
             case KeyEvent.VK_A: // 按下A键，发射简易光弹
-                ultraMan.fly(6);
+                ultraMan.action(6);
                 createSimpleShell();
                 break;
-            case KeyEvent.VK_S: // 按下S键，发射光线
-                ultraMan.fly(7);
-                createBeam();
+            case KeyEvent.VK_F: // 按下S键，发射超-必杀技
+                ultraMan.action(7);
+                createNirvanaBeam();
                 break;
             case KeyEvent.VK_SPACE: // 按下空格键
                 if (ultraMan.getHeart() < 1) { // 只有生命值归零时才生效
@@ -112,16 +111,16 @@ public class GameFrame extends Frame {
     private void minu(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 如果松开的是方向键上键
-                ultraMan.fly(5);
+                ultraMan.action(5);
                 break;
             case KeyEvent.VK_DOWN:
-                ultraMan.fly(5);
+                ultraMan.action(5);
                 break;
             case KeyEvent.VK_LEFT:
-                ultraMan.fly(5);
+                ultraMan.action(5);
                 break;
             case KeyEvent.VK_RIGHT:
-                ultraMan.fly(5);
+                ultraMan.action(5);
                 break;
         }
     }
@@ -148,6 +147,7 @@ public class GameFrame extends Frame {
 //        timer = new Timer();
         scoreCounter = new ScoreCounter();
         record = new Record();
+        monsterCount = 0;
     }
 
     /**
@@ -156,7 +156,7 @@ public class GameFrame extends Frame {
     class GameRun extends Thread {
         @Override
         public void run() {
-            int monsterCount = 0;
+
             // 不断地绘制
             while (true) {
                 monsterCount += 1;
@@ -238,6 +238,11 @@ public class GameFrame extends Frame {
      * 创建简易光弹对象
      */
     public void createSimpleShell() {
+        // MP不足，无法发射
+        if (ultraMan.getMana() - SimpleShell.getManaValue() < 0) {
+            return;
+        }
+        ultraMan.subMana(SimpleShell.getManaValue());
         SimpleShell simpleShell = new SimpleShell(ImageUtil.loadBufferedImage(Constant.SIMPLE_SHELL_IMG),
                 ultraMan.getX()+80, ultraMan.getY()+30, 45, 45, 15);
         simpleShells.add(simpleShell);
@@ -246,8 +251,13 @@ public class GameFrame extends Frame {
     /**
      * 创建光线对象
      */
-    public void createBeam() {
-        Beam beam = new Beam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
+    public void createNirvanaBeam() {
+        // MP不足，无法发射
+        if (ultraMan.getMana() - NirvanaBeam.getManaValue() < 0) {
+            return;
+        }
+        ultraMan.subMana(NirvanaBeam.getManaValue());
+        NirvanaBeam beam = new NirvanaBeam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
                 ultraMan.getX()+80, ultraMan.getY()+30, 750, 50, 10);
         beams.add(beam);
     }
