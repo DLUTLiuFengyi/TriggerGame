@@ -210,12 +210,12 @@ public class GameFrame extends Frame {
             g.setColor(Color.red);
             g.setFont(new Font("微软雅黑", 1, 45));
             // 画出
-            g.drawString(over, (int) (com.old.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.old.flappy.util.Constant.FRAME_HEIGHT / 2));
+            g.drawString(over, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2));
 
             String reset = "Press Space to Restart";
             g.setColor(Color.orange);
             g.setFont(new Font("微软雅黑", 1, 30));
-            g.drawString(reset, (int) (com.old.flappy.util.Constant.FRAME_WIDTH / 2), (int)(com.old.flappy.util.Constant.FRAME_HEIGHT / 2) + 50);
+            g.drawString(reset, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2) + 50);
         }
     }
 

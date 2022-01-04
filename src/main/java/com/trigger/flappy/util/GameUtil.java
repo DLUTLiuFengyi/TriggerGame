@@ -1,6 +1,5 @@
 package com.trigger.flappy.util;
 
-import com.old.flappy.util.Constant;
 import com.trigger.flappy.object.*;
 
 import java.awt.*;
