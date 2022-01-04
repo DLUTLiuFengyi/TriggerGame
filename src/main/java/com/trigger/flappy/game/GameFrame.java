@@ -18,7 +18,7 @@ import static com.trigger.flappy.util.GameEntities.*;
 public class GameFrame extends Frame {
 
     private Background background;
-    private Timer timer;
+//    private Timer timer;
     private Record record;
 
     private BufferedImage bufferedImage = new BufferedImage(
@@ -135,7 +135,8 @@ public class GameFrame extends Frame {
         monsters.clear();
 //        barriers.clear();
         ultraMan.restart(); // 将奥特曼位置初始化
-        timer.restart(); // 时钟重置
+//        timer.restart(); // 时钟重置
+        scoreCounter.restart();
     }
 
     /**
@@ -144,7 +145,8 @@ public class GameFrame extends Frame {
     public void initGame() {
         ultraMan = new UltraMan();
         background = new Background();
-        timer = new Timer();
+//        timer = new Timer();
+        scoreCounter = new ScoreCounter();
         record = new Record();
     }
 
@@ -194,8 +196,10 @@ public class GameFrame extends Frame {
             Graphics graphics = bufferedImage.getGraphics();
             // 将相关游戏对象先画到缓存画布上
             background.drawSelf(graphics);
-            timer.drawSelf(graphics);
-            record.setCurrentDuration((int)timer.computeDuration());
+//            timer.drawSelf(graphics);
+            scoreCounter.drawSelf(graphics);
+//            record.setCurrentDuration((int)timer.computeDuration());
+            record.setCurrentScores(scoreCounter.getScores());
             record.drawSelf(graphics);
             // 怪兽绘制
             for (int i=0; i<monsters.size(); i++) {

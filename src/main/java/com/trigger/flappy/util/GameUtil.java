@@ -14,18 +14,18 @@ import java.util.Random;
 public class GameUtil {
 
     /**
-     * 获取文件中的数据
+     * 获取时长记录或得分记录
      */
-    public static int getDataFromFile(String filePath) {
+    public static int getRecordFromFile(String filePath) {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(new File(filePath)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        int read = 0;
+        int recordValue = 0;
         try {
-            read = Integer.parseInt(in.readLine());
+            recordValue = Integer.parseInt(in.readLine());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,13 +34,13 @@ public class GameUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return read;
+        return recordValue;
     }
 
     /**
-     * 存储数据
+     * 新纪录存储到文件中
      */
-    public static void setDataIntoFile(String data, String filePath) {
+    public static void setRecordIntoFile(String recordValue, String filePath) {
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(new File(filePath));
@@ -48,7 +48,7 @@ public class GameUtil {
             e.printStackTrace();
         }
         try {
-            fileWriter.write(data);
+            fileWriter.write(recordValue);
         } catch (IOException e) {
             e.printStackTrace();
         }

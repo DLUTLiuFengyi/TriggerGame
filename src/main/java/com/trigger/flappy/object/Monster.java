@@ -55,6 +55,9 @@ public class Monster extends ObjectBase {
     // 怪兽血量
     private int heart;
 
+    // 怪兽被击败所获得分数
+    private int scoreReceived;
+
     public Monster(InvincibleHook invincibleHook) {
         // 新的怪兽对象固定从窗口最右端开始生成
         x = Constant.FRAME_WIDTH;
@@ -119,30 +122,35 @@ public class Monster extends ObjectBase {
                 heart = 14;
                 width = imgs[0].getWidth();
                 height = imgs[0].getHeight();
+                scoreReceived = 10;
                 break;
             case 2: // 小金人
                 type = 2;
                 heart = 14;
                 width = imgs[1].getWidth();
                 height = imgs[1].getHeight();
+                scoreReceived = 12;
                 break;
             case 3: // 塞古
                 type = 3;
                 heart = 6;
                 width = imgs[2].getWidth();
                 height = imgs[2].getHeight();
+                scoreReceived = 5;
                 break;
             case 4: // 布鲁顿
                 type = 4;
                 heart = 6;
                 width = imgs[3].getWidth();
                 height = imgs[3].getHeight();
+                scoreReceived = 8;
                 break;
             case 5: // 基三
                 type = 5;
                 heart = 12;
                 width = imgs[4].getWidth();
                 height = imgs[4].getHeight();
+                scoreReceived = 10;
                 break;
         }
     }
@@ -177,7 +185,8 @@ public class Monster extends ObjectBase {
     private boolean judgeOutOfScreen() {
         // 判断是否移除屏幕外
         if (x < -imgs[type-1].getWidth()) {
-            System.out.println("屏幕外，删除怪兽");
+            System.out.println("屏幕外，得分-50");
+            scoreCounter.subScore(50);
             monsters.remove(this);
             return true;
         }
@@ -194,8 +203,7 @@ public class Monster extends ObjectBase {
         }
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())) {
-                this.heart = 0;
-                monsters.remove(this);
+                eliminateLogic();
                 return ;
             }
         }
@@ -205,11 +213,20 @@ public class Monster extends ObjectBase {
                 // 同时这个光弹对象也需要被删除，避免线程刷新时保留效果，导致障碍物被同一光弹多次攻击
                 simpleShells.remove(simpleShells.get(i));
                 if (this.heart < 1) {
-                    monsters.remove(this);
+                    eliminateLogic();
                 }
                 return ;
             }
         }
+    }
+
+    /**
+     * 处理怪兽被击败的逻辑
+     */
+    private void eliminateLogic() {
+        this.heart = 0;
+        monsters.remove(this);
+        scoreCounter.addScore(this.scoreReceived);
     }
 
     /**

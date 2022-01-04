@@ -24,7 +24,9 @@ public class Constant {
     // 游戏背景颜色
     public static final Color BK_COLOR = new Color(0xEA7642);
 
-    public static final String RECORD_FILE_PATH = "game_file/record.txt";
+    public static final String DURATION_RECORD_FILE_PATH = "game_file/durationRecord.txt";
+
+    public static final String SCORES_RECORD_FILE_PATH = "game_file/scoresRecord.txt";
 
     // 奥特曼图片
     public static final String[] ULTRAMAN_IMG = {"img/trigger_sky.png", "img/trigger_sky.png",

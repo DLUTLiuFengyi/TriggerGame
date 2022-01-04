@@ -13,6 +13,8 @@ public class GameEntities {
     // 奥特曼对象
     public static UltraMan ultraMan = new UltraMan();
 
+    public static ScoreCounter scoreCounter;
+
     // 简易光弹列表
     public static List<SimpleShell> simpleShells = new ArrayList<>();
 

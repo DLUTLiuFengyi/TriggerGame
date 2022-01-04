@@ -19,29 +19,18 @@ public class Record extends ObjectBase {
 
     // 游戏得分记录
     private int scoresRecord;
+    // 当前游戏得分
+    private int currentScores;
 
-    private String recordFilePath = Constant.RECORD_FILE_PATH;
+    private String durationRecordFilePath = Constant.DURATION_RECORD_FILE_PATH;
+
+    private String scoresRecordFilePath = Constant.SCORES_RECORD_FILE_PATH;
 
     public Record() {
         x = 280;
         y = 95;
-        this.durationRecord = GameUtil.getDataFromFile(recordFilePath);
-    }
-
-    public int getDurationRecord() {
-        return durationRecord;
-    }
-
-    public void setDurationRecord(int durationRecord) {
-        this.durationRecord = durationRecord;
-    }
-
-    public String getRecordFilePath() {
-        return recordFilePath;
-    }
-
-    public void setRecordFilePath(String recordFilePath) {
-        this.recordFilePath = recordFilePath;
+//        this.durationRecord = GameUtil.getRecordFromFile(durationRecordFilePath);
+        this.scoresRecord = GameUtil.getRecordFromFile(scoresRecordFilePath);
     }
 
     public int getCurrentDuration() {
@@ -52,25 +41,32 @@ public class Record extends ObjectBase {
         this.currentDuration = currentDuration;
     }
 
+    public int getCurrentScores() {
+        return currentScores;
+    }
+
+    public void setCurrentScores(int currentScores) {
+        this.currentScores = currentScores;
+    }
+
     @Override
     public void drawSelf(Graphics g) {
-        // 与存储在游戏文件record.txt中的最高时间记录作比较
-        if (currentDuration > durationRecord) {
-            durationRecord = currentDuration;
-            GameUtil.setDataIntoFile(String.valueOf(durationRecord), recordFilePath);
+        // 与存储在游戏文件durationRecord.txt中的最高记录作比较
+//        if (currentDuration > durationRecord) {
+//            durationRecord = currentDuration;
+//            GameUtil.setRecordIntoFile(String.valueOf(durationRecord), durationRecordFilePath);
+//        }
+//        g.setColor(Color.white);
+//        g.setFont(new Font("微软雅黑", 1, 25));
+//        g.drawString("Best duration: " + durationRecord + "s", x, y);
+
+        // 与存储在游戏文件scoresRecord.txt中的最高记录作比较
+        if (currentScores > scoresRecord) {
+            scoresRecord = currentScores;
+            GameUtil.setRecordIntoFile(String.valueOf(scoresRecord), scoresRecordFilePath);
         }
         g.setColor(Color.white);
         g.setFont(new Font("微软雅黑", 1, 25));
-        g.drawString("Best scores: " + durationRecord, x, y);
-//        if (currentDuration <= durationRecord) {
-//            g.setColor(Color.white);
-//            g.setFont(new Font("微软雅黑", 1, 25));
-//            g.drawString("Best scores: " + durationRecord, x, y);
-//        } else {
-//            GameUtil.setDataIntoFile(String.valueOf(currentDuration), recordFilePath);
-//            g.setColor(Color.white);
-//            g.setFont(new Font("微软雅黑", 1, 25));
-//            g.drawString("Best scores: " + GameUtil.getDataFromFile(recordFilePath), x, y);
-//        }
+        g.drawString("Best scores: " + scoresRecord, x, y);
     }
 }
