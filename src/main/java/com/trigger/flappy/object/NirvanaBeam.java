@@ -13,18 +13,18 @@ import static com.trigger.flappy.util.GameEntities.beams;
  *
  * author: lfy
  */
-public class Beam extends ObjectBase {
+public class NirvanaBeam extends ObjectBase {
 
     @Override
     public BufferedImage getImg() {
         return super.getImg();
     }
 
-    public Beam() {
+    public NirvanaBeam() {
         super();
     }
 
-    public Beam(BufferedImage img, int x, int y, int width, int height, int speed) {
+    public NirvanaBeam(BufferedImage img, int x, int y, int width, int height, int speed) {
         this.img = img;
         this.x = x;
         this.y = y;
