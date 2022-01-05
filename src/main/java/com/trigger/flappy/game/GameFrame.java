@@ -302,7 +302,7 @@ public class GameFrame extends Frame {
         // 扣除所需MP
         ultraMan.subMana(NirvanaBeam.getManaValue());
         NirvanaBeam beam = new NirvanaBeam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
-                ultraMan.getX()+50, ultraMan.getY()+30, 50, 20);
+                ultraMan.getX()+50, ultraMan.getY()+30, 50, 10);
         beams.add(beam);
     }
 

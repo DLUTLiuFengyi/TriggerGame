@@ -109,6 +109,7 @@ public class Boss extends Monster {
                 this.heart -= beams.get(i).getDamageAmount();
                 // 将此光线添加进之后会被BOSS无视的列表中，避免同一条光线多次对BOSS造成伤害的情况
                 bossIgnoreBeams.add(beams.get(i));
+                // 营造“光线击中BOSS”的视觉效果
                 beamHitTheBossHook.subWidthOfBeam(beams.get(i));
                 if (this.heart < 1) {
                     eliminateLogic();
