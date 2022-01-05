@@ -36,6 +36,10 @@ It's very rough and just has few functions.
 >
 > 游戏结束后，点击空格键重新开始游戏
 
+#### BOSS战
+
+得分（或时间）达到一定程度时，触发BOSS战。
+
 ### 画面（斯是陋室，惟吾德馨 :satisfied:）
 ### Game Screenshots
 
