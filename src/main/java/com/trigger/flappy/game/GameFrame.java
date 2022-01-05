@@ -20,6 +20,17 @@ public class GameFrame extends Frame {
 //    private Timer timer;
     private Record record;
 
+    private int bossStatus = 0; // BOSS状态（未创建，正在战斗，已被打败）
+    private static int BOSS_NO_INIT = 0;
+    private static int BOSS_IN_BATTLE = 1;
+    private static int BOSS_BEAT = 2;
+
+    // 游戏状态（普通战斗，boss战，游戏结束）
+    private static int gameStatus = 1;
+    private final static int NORMAL_BATTLE = 1;
+    private final static int BOSS_BATTLE = 2;
+    private final static int GAME_OVER = 3;
+
     private BufferedImage bufferedImage = new BufferedImage(
             Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
     );
@@ -126,19 +137,6 @@ public class GameFrame extends Frame {
     }
 
     /**
-     * 重新开始游戏
-     */
-    public void restart() {
-        simpleShells.clear();
-        beams.clear();
-        monsters.clear();
-//        barriers.clear();
-        ultraMan.restart(); // 将奥特曼位置初始化
-//        timer.restart(); // 时钟重置
-        scoreCounter.restart();
-    }
-
-    /**
      * 对游戏中的对象进行实例化
      */
     public void initGame() {
@@ -148,26 +146,46 @@ public class GameFrame extends Frame {
         scoreCounter = new ScoreCounter();
         record = new Record();
         monsterCount = 0;
+        manaCount = 0;
     }
 
     /**
      * 执行游戏的线程，不断地将游戏对象绘制到屏幕画布上
+     * 这个通过调用repaint()让jvm去执行update()方法，不断地进行绘制刷新
+     * 因此，具体的绘制方法写在重载的update()方法中
      */
     class GameRun extends Thread {
         @Override
         public void run() {
-
             // 不断地绘制
             while (true) {
-                monsterCount += 1;
-                if (monsterCount % 30 == 0) { // 控制怪兽对象生成速度
-                    // 不断创建怪兽对象
-                    createMonsters();
-                    if (monsterCount > 3000) {
+                manaCount += 1;
+                if (manaCount > 3000) {
+                    manaCount = 0;
+                }
+                if (ultraMan.getHeart() < 1) { // 生命值归0，切换到游戏结束模式
+                    gameStatus = GAME_OVER;
+                }
+                if (gameStatus == NORMAL_BATTLE) { // 普通战斗模式
+                    bossStatus = BOSS_NO_INIT;
+                    monsterCount += 1;
+                    if (monsterCount % 30 == 0) { // 控制怪兽对象生成速度
+                        // 不断创建怪兽对象
+                        createMonsters();
+                    }
+                    if (monsterCount > 500) { // 计数器大于3000，切换到BOSS战模式
+                        // monsterCount置为1，避免其值过大
                         monsterCount = 1;
+                        // 切换为boss战模式，停止自动生成普通怪兽
+                        gameStatus = BOSS_BATTLE;
+                    }
+//                }
+                } else if (gameStatus == BOSS_BATTLE) {
+                    createBoss();
+                    if (boss == null) { // BOSS被打败，切换到普通战斗模式
+                        hasBeatBoss();
                     }
                 }
-
                 // 通过调用repaint() 让jvm去执行update方法，进行重新的绘制
                 repaint();
                 try {
@@ -186,7 +204,7 @@ public class GameFrame extends Frame {
      */
     @Override
     public void update(Graphics g) {
-        if (ultraMan.getHeart() > 0) {
+        if (gameStatus == NORMAL_BATTLE) { // 普通战斗状态
             /**
              * 缓存思想解决屏幕闪烁问题 双缓冲技术
              * 思路：先创建一个空的图片，把所有组件先绘制在空的图片上
@@ -196,9 +214,7 @@ public class GameFrame extends Frame {
             Graphics graphics = bufferedImage.getGraphics();
             // 将相关游戏对象先画到缓存画布上
             background.drawSelf(graphics);
-//            timer.drawSelf(graphics);
             scoreCounter.drawSelf(graphics);
-//            record.setCurrentDuration((int)timer.computeDuration());
             record.setCurrentScores(scoreCounter.getScores());
             record.drawSelf(graphics);
             // 怪兽绘制
@@ -218,8 +234,7 @@ public class GameFrame extends Frame {
             // 一次性将所有游戏对象绘制到屏幕中
             g.drawImage(bufferedImage, 0, 0, null);
 
-        } else {
-            // 否则 游戏结束
+        } else if (gameStatus == GAME_OVER) { // 游戏结束状态
             String over = "Game Over";
             // 设置画笔
             g.setColor(Color.red);
@@ -231,6 +246,30 @@ public class GameFrame extends Frame {
             g.setColor(Color.orange);
             g.setFont(new Font("微软雅黑", 1, 30));
             g.drawString(reset, (int) (Constant.FRAME_WIDTH / 2), (int)(Constant.FRAME_HEIGHT / 2) + 50);
+        } else if (gameStatus == BOSS_BATTLE) { // BOSS战状态
+            // 得到缓存画布的画笔
+            Graphics graphics = bufferedImage.getGraphics();
+            // 将相关游戏对象先画到缓存画布上
+            background.drawSelf(graphics);
+            scoreCounter.drawSelf(graphics);
+            record.setCurrentScores(scoreCounter.getScores());
+            record.drawSelf(graphics);
+            // BOSS绘制
+            if (boss != null) {
+                boss.drawSelf(graphics);
+            }
+            // 奥特曼绘制
+            ultraMan.drawSelf(graphics);
+            // 光弹绘制
+            for (int i=0; i<simpleShells.size(); i++) {
+                simpleShells.get(i).drawSelf(graphics);
+            }
+            // 光线绘制
+            for (int i=0; i<beams.size(); i++) {
+                beams.get(i).drawSelf(graphics);
+            }
+            // 一次性将所有游戏对象绘制到屏幕中
+            g.drawImage(bufferedImage, 0, 0, null);
         }
     }
 
@@ -298,5 +337,41 @@ public class GameFrame extends Frame {
 //        }
         Monster monster = new Monster(new InvincibleHook());
         monsters.add(monster);
+    }
+
+    /**
+     * 创建BOSS对象
+     */
+    private void createBoss() {
+        if (boss == null && bossStatus == BOSS_NO_INIT) {
+            boss = new Boss(new InvincibleHook());
+            bossStatus = BOSS_IN_BATTLE;
+        }
+    }
+
+    /**
+     * 打败BOSS，处理收尾逻辑
+     */
+    private void hasBeatBoss() {
+        bossStatus = BOSS_BEAT;
+        // 为了保证打败BOSS之后，普通怪兽能从屏幕右边界开始出现
+        // 而不是突然出现在之前消失的位置，需要将原来留在怪兽列表中的怪兽删除
+        monsters.clear();
+        System.out.println("打败BOSS");
+        gameStatus = NORMAL_BATTLE;
+    }
+
+    /**
+     * 重新开始游戏
+     */
+    public void restart() {
+        simpleShells.clear();
+        beams.clear();
+        monsters.clear();
+        boss = null;
+        ultraMan.restart(); // 将奥特曼位置初始化
+        scoreCounter.restart();
+        gameStatus = NORMAL_BATTLE;
+        bossStatus = BOSS_NO_INIT;
     }
 }

@@ -42,6 +42,8 @@ public class Constant {
     public static final String[] MONSTER_IMG = {"img/monster1.png", "img/monster2.png", "img/monster3.png",
             "img/monster4.png", "img/monster5.png"};
 
+    public static final String BOSS_IMG = "img/monster1.png";
+
     // 简易光弹图片
     public static final String SIMPLE_SHELL_IMG = "img/simple_shell.png";
 

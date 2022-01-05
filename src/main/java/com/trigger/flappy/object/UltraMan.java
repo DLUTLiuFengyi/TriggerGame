@@ -6,6 +6,7 @@ import com.trigger.flappy.util.Constant;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static com.trigger.flappy.util.GameEntities.manaCount;
 import static com.trigger.flappy.util.GameEntities.monsterCount;
 
 /**
@@ -102,7 +103,7 @@ public class UltraMan extends ObjectBase {
 //        g.drawRect(x, y, (int)rect.getWidth(), rect.height);
         rect.x = x;
         rect.y = y;
-        showUltraManStatus(g);
+        showUltraManInfo(g);
     }
 
     /**
@@ -136,8 +137,8 @@ public class UltraMan extends ObjectBase {
     /**
      * 接收键盘的操纵信息，进行状态的设置
      */
-    public void action(int fly) {
-        switch (fly) {
+    public void action(int actionNum) {
+        switch (actionNum) {
             case 1:
                 state = STATE_UP;
                 break;
@@ -170,7 +171,7 @@ public class UltraMan extends ObjectBase {
         if (this.mana > 99) {
             return;
         }
-        if (monsterCount % 2 == 0) {
+        if (manaCount % 2 == 0) {
             this.mana += 1;
         }
     }
@@ -178,7 +179,7 @@ public class UltraMan extends ObjectBase {
     /**
      * 显示奥特曼当前信息（血量和蓝量）
      */
-    private void showUltraManStatus(Graphics g) {
+    private void showUltraManInfo(Graphics g) {
         /**
          * 绘制血条
          */

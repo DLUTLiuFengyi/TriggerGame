@@ -35,9 +35,9 @@ public class ScoreCounter extends ObjectBase {
      */
     public void subScore(int value) {
         this.scores -= value;
-        if (this.scores < 0) {
-            this.scores = 0;
-        }
+//        if (this.scores < 0) {
+//            this.scores = 0;
+//        }
     }
 
     @Override

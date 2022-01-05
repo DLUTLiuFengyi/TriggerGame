@@ -16,8 +16,10 @@ public class GameEntities {
     // 得分计数器
     public static ScoreCounter scoreCounter;
 
-    // 用于控制怪兽生成速度，以及MP恢复速度的计数器
+    // 用于控制怪兽生成速度的计数器
     public static int monsterCount;
+    // 用于控制MP恢复速度的计数器
+    public static int manaCount;
 
     // 简易光弹列表
     public static List<SimpleShell> simpleShells = new ArrayList<>();
@@ -29,4 +31,6 @@ public class GameEntities {
     public static List<Barrier> barriers = new ArrayList<>();
     // 怪兽列表
     public static List<Monster> monsters = new ArrayList<>();
+    // BOSS
+    public static Boss boss = null;
 }

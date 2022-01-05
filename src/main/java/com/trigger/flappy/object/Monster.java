@@ -13,7 +13,7 @@ import static com.trigger.flappy.util.GameEntities.*;
 import static com.trigger.flappy.util.GameUtil.*;
 
 /**
- * 怪兽对类
+ * 怪兽类
  *
  * author: lfy
  */
@@ -23,7 +23,7 @@ public class Monster extends ObjectBase {
     private static BufferedImage[] imgs;
 
     // 回调函数，用于与奥特曼碰撞后，对奥特曼无敌状态的设置
-    private InvincibleHook invincibleHook;
+    public InvincibleHook invincibleHook;
 
     /**
      * 静态代码块，让类加载的时候将怪兽的图片加载到内存中
@@ -37,7 +37,7 @@ public class Monster extends ObjectBase {
     }
 
     // 怪兽类型
-    private int type;
+    public int type;
     // 小金牛
     private static final int ABSOLUTE_DIAVOLO = 1;
     // 小金人
@@ -53,10 +53,15 @@ public class Monster extends ObjectBase {
     private static final int BARRIER_SPEED = 3;
 
     // 怪兽血量
-    private int heart;
+    public int heart;
 
     // 怪兽被击败所获得分数
-    private int scoreReceived;
+    public int scoreReceived;
+
+    // 如果是BOSS，也需要一个无敌状态
+    private boolean beamInvincible = false;
+
+    public Monster() {}
 
     public Monster(InvincibleHook invincibleHook) {
         // 新的怪兽对象固定从窗口最右端开始生成
@@ -103,10 +108,18 @@ public class Monster extends ObjectBase {
         this.rect = rect;
     }
 
+    public int getHeart() {
+        return heart;
+    }
+
+    public void setHeart(int heart) {
+        this.heart = heart;
+    }
+
     /**
      * 随机选取一种类型，然后确定每种类型的对应成员变量的取值
      */
-    private void generateRandomElement() {
+    public void generateRandomElement() {
         // 五种类型的怪兽（小金牛，小金人，塞古，布鲁顿，基三）
         int[] randomType = new int[]{1, 2, 3, 4, 5};
         Random random = new Random();
@@ -182,11 +195,11 @@ public class Monster extends ObjectBase {
     /**
      * 判断障碍物是否已移动出屏幕左边界（障碍物从右向左移动）
      */
-    private boolean judgeOutOfScreen() {
+    public boolean judgeOutOfScreen() {
         // 判断是否移除屏幕外
         if (x < -imgs[type-1].getWidth()) {
-            System.out.println("屏幕外，得分-5");
-            scoreCounter.subScore(5);
+            System.out.println("屏幕外，得分-50");
+            scoreCounter.subScore(50);
             monsters.remove(this);
             return true;
         }
@@ -196,14 +209,20 @@ public class Monster extends ObjectBase {
     /**
      * 与光弹、光线的碰撞检测
      */
-    private void judgeCollideWithBeam() {
+    public void judgeCollideWithBeam() {
         // 尚未进入屏幕中的障碍物，不进行碰撞检测
         if (this.x > Constant.FRAME_WIDTH) {
             return ;
         }
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())) {
-                eliminateLogic();
+                this.heart -= beams.get(i).getDamageAmount();
+                if (this instanceof Boss) {
+
+                }
+                if (this.height < 1) {
+                    eliminateLogic();
+                }
                 return ;
             }
         }
@@ -221,18 +240,22 @@ public class Monster extends ObjectBase {
     }
 
     /**
-     * 处理怪兽被击败的逻辑
+     * 处理普通怪兽或BOSS被击败的逻辑
      */
-    private void eliminateLogic() {
+    public void eliminateLogic() {
         this.heart = 0;
-        monsters.remove(this);
+        if (this instanceof Boss) {
+            boss = null;
+        } else {
+            monsters.remove(this);
+        }
         scoreCounter.addScore(this.scoreReceived);
     }
 
     /**
      * 与奥特曼的碰撞检测
      */
-    private boolean judgeCollideWithUltraMan() {
+    public boolean judgeCollideWithUltraMan() {
         // 判断奥特曼矩形与障碍物矩形是否相交
         if (!ultraMan.isInvincible()) {
             // 如果奥特曼不是无敌状态
@@ -257,7 +280,7 @@ public class Monster extends ObjectBase {
      * 根据type确定需要绘制的类型（从上往下，从下往上，悬空，悬空可动）
      * 并进行绘制
      */
-    private void drawBasedOnType(Graphics g) {
+    public void drawBasedOnType(Graphics g) {
         switch (type) {
             case ABSOLUTE_DIAVOLO:
                 drawMobile(g, 8, false);
@@ -289,7 +312,7 @@ public class Monster extends ObjectBase {
     }
 
     // 该状态用来控制可动对象的上下移动
-    private boolean mobile = true;
+    public boolean mobile = true;
 
     /**
      * 绘制可动的怪兽
@@ -298,7 +321,7 @@ public class Monster extends ObjectBase {
      * @param movingSpeed 移动速度
      * @param movingLAndR 是否能左右移动
      */
-    private void drawMobile(Graphics g, int movingSpeed, boolean movingLAndR) {
+    public void drawMobile(Graphics g, int movingSpeed, boolean movingLAndR) {
         // 绘制
         g.drawImage(imgs[type-1], x, y, null);
 
