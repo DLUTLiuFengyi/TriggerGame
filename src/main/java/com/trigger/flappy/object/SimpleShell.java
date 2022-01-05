@@ -17,8 +17,14 @@ public class SimpleShell extends ObjectBase {
 
     private static int manaValue = 4; // 消耗的MP量
 
+    private int damageAmount = 2; // 对怪兽造成的伤害量
+
     public static int getManaValue() {
         return manaValue;
+    }
+
+    public int getDamageAmount() {
+        return damageAmount;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.trigger.flappy.game;
 
 import com.image.ImageUtil;
+import com.trigger.flappy.method.BeamHitTheBossHook;
 import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.object.*;
 import com.trigger.flappy.object.NirvanaBeam;
@@ -301,7 +302,7 @@ public class GameFrame extends Frame {
         // 扣除所需MP
         ultraMan.subMana(NirvanaBeam.getManaValue());
         NirvanaBeam beam = new NirvanaBeam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
-                ultraMan.getX()+80, ultraMan.getY()+30, 750, 50, 10);
+                ultraMan.getX()+50, ultraMan.getY()+30, 50, 20);
         beams.add(beam);
     }
 
@@ -348,7 +349,7 @@ public class GameFrame extends Frame {
      */
     private void createBoss() {
         if (boss == null && bossStatus == BOSS_NO_INIT) {
-            boss = new Boss(new CollideInvincibleHook());
+            boss = new Boss(new CollideInvincibleHook(), new BeamHitTheBossHook());
             bossStatus = BOSS_IN_BATTLE;
         }
     }

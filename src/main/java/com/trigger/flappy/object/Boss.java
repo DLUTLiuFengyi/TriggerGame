@@ -1,6 +1,7 @@
 package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
+import com.trigger.flappy.method.BeamHitTheBossHook;
 import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.util.Constant;
 
@@ -20,12 +21,15 @@ public class Boss extends Monster {
 
     private static int BOSS_FULL_HEART = 500;
 
+    // 该回调函数实现“光线击中BOSS”的视觉效果
+    private BeamHitTheBossHook beamHitTheBossHook;
+
     static {
         bossImg = ImageUtil.loadBufferedImage(Constant.BOSS_IMG);
     }
 
-    public Boss(CollideInvincibleHook collideHook) {
-        // 新的怪兽对象固定从窗口最右端开始生成
+    public Boss(CollideInvincibleHook collideHook, BeamHitTheBossHook beamHitTheBossHook) {
+        // BOSS对象固定从窗口最右端开始生成
         x = Constant.FRAME_WIDTH;
         y = 100;
         width = bossImg.getWidth() * 2;
@@ -38,6 +42,8 @@ public class Boss extends Monster {
         rect = new Rectangle();
         // 一个用于奥特曼与怪兽碰撞后无敌状态相关设置的回调函数
         this.collideHook = collideHook;
+        // 实现”光线击中BOSS“的视觉效果
+        this.beamHitTheBossHook = beamHitTheBossHook;
     }
 
     @Override
@@ -99,9 +105,11 @@ public class Boss extends Monster {
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())
                     && !bossIgnoreBeams.contains(beams.get(i))) {
+                // 击中敌人，扣除血量
                 this.heart -= beams.get(i).getDamageAmount();
                 // 将此光线添加进之后会被BOSS无视的列表中，避免同一条光线多次对BOSS造成伤害的情况
                 bossIgnoreBeams.add(beams.get(i));
+                beamHitTheBossHook.subWidthOfBeam(beams.get(i));
                 if (this.heart < 1) {
                     eliminateLogic();
                 }
@@ -110,7 +118,8 @@ public class Boss extends Monster {
         }
         for (int i=0; i<simpleShells.size(); i++) {
             if (this.getRect().intersects(simpleShells.get(i).getRect())) {
-                this.heart -= 2;
+                // 击中敌人，扣除血量
+                this.heart -= simpleShells.get(i).getDamageAmount();
                 // 同时这个光弹对象也需要被删除，避免线程刷新时保留效果，导致障碍物被同一光弹多次攻击
                 simpleShells.remove(simpleShells.get(i));
                 if (this.heart < 1) {

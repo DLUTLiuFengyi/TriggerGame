@@ -212,6 +212,7 @@ public class Monster extends ObjectBase {
         }
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())) {
+                // 击中敌人，扣除血量
                 this.heart -= beams.get(i).getDamageAmount();
                 if (this.heart < 1) {
                     eliminateLogic();
@@ -221,7 +222,8 @@ public class Monster extends ObjectBase {
         }
         for (int i=0; i<simpleShells.size(); i++) {
             if (this.getRect().intersects(simpleShells.get(i).getRect())) {
-                this.heart -= 2;
+                // 击中敌人，扣除血量
+                this.heart -= simpleShells.get(i).getDamageAmount();
                 // 同时这个光弹对象也需要被删除，避免线程刷新时保留效果，导致障碍物被同一光弹多次攻击
                 simpleShells.remove(simpleShells.get(i));
                 if (this.heart < 1) {
