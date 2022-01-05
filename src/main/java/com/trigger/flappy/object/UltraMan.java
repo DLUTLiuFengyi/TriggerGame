@@ -113,21 +113,30 @@ public class UltraMan extends ObjectBase {
         switch (state) {
             case STATE_UP: // 向上
                 y -= speed;
-                if (y < 20) { // 保证小鸟不飞出屏幕
+                if (y < 20) { // 保证奥特曼不飞出屏幕上方
                     y = 20;
                 }
                 break;
             case STATE_DOWN: // 向下
                 y += speed;
-                if (y > Constant.FRAME_HEIGHT - images[0].getHeight()) { // 保证小鸟不落出屏幕
+                if (y > Constant.FRAME_HEIGHT - images[0].getHeight()) {
+                    // 保证奥特曼不飞出屏幕下方
                     y = Constant.FRAME_HEIGHT- images[0].getHeight();
                 }
                 break;
             case STATE_LEFT: // 向左
                 x -= speed * 2;
+                if (x < 10) {
+                    // 保证奥特曼不飞出屏幕左边界
+                    x = 10;
+                }
                 break;
             case STATE_RIGHT: // 向右
                 x += speed;
+                if (x > Constant.FRAME_WIDTH - images[0].getWidth()) {
+                    // 保证奥特曼不飞出屏幕右边界
+                    x = Constant.FRAME_WIDTH - images[0].getWidth();
+                }
                 break;
             case STATE_STILL: // 静止
                 break;

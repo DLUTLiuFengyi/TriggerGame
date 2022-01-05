@@ -74,7 +74,7 @@ public class ImageUtil {
     }
 
     /**
-     * 去除图片背景，宽松版
+     * 去除图片背景，宽松版（未实现）
      */
     public static BufferedImage removeBackgroundRange(BufferedImage img) {
         int alpha = 255; // 透明度
@@ -110,7 +110,7 @@ public class ImageUtil {
     }
 
     /**
-     * 两个颜色相近
+     * 两种颜色相近
      */
     private static boolean similarColor(int rgb1, int rgb2) {
         if (rgb1 == rgb2) {
@@ -121,7 +121,7 @@ public class ImageUtil {
     }
 
     /**
-     * 旋转图片
+     * 旋转图片，degree是度数（0~360）
      */
     public static BufferedImage rotate(double degree, BufferedImage originImg) {
         int wid = originImg.getWidth();

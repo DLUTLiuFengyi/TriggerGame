@@ -1,6 +1,8 @@
 package com.trigger.flappy.util;
 
 import com.trigger.flappy.object.*;
+import com.trigger.flappy.object.NirvanaBeam;
+import com.trigger.flappy.object.SimpleShell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class GameEntities {
     // 简易光弹列表
     public static List<SimpleShell> simpleShells = new ArrayList<>();
 
-    // 发射的光线之所以是列表，主要是为了上一条光线还没飞出屏幕，角色能发射第二条光线
+    // 超-必杀技光线列表
     public static List<NirvanaBeam> beams = new ArrayList<>();
 
     // 障碍物列表
@@ -33,4 +35,7 @@ public class GameEntities {
     public static List<Monster> monsters = new ArrayList<>();
     // BOSS
     public static Boss boss = null;
+
+    // 击中BOSS一次之后的光线，会被添加进此队列中，避免同一条光线持续对BOSS造成多次伤害
+    public static List<ObjectBase> bossIgnoreBeams = new ArrayList<>();
 }

@@ -1,13 +1,11 @@
 package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.Random;
 
 import static com.trigger.flappy.util.GameEntities.*;
@@ -22,7 +20,7 @@ public class Barrier extends ObjectBase {
     private static BufferedImage[] imgs;
 
     // 回调函数，用于与奥特曼碰撞后，对奥特曼无敌状态的设置
-    private InvincibleHook invincibleHook;
+    private CollideInvincibleHook invincibleHook;
 
     /**
      * 静态代码块，让类加载的时候将三个图片初始化
@@ -67,7 +65,7 @@ public class Barrier extends ObjectBase {
         generateRandomElement();
         // 生成矩形
         rect = new Rectangle();
-        invincibleHook = new InvincibleHook();
+        invincibleHook = new CollideInvincibleHook();
     }
 
     public Barrier(int heart) {
@@ -79,7 +77,7 @@ public class Barrier extends ObjectBase {
         generateRandomElement();
         // 生成矩形
         rect = new Rectangle();
-        invincibleHook = new InvincibleHook();
+        invincibleHook = new CollideInvincibleHook();
     }
 
     public int getX() {

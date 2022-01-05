@@ -1,5 +1,6 @@
 package com.trigger.flappy.object;
 
+import com.trigger.flappy.object.ObjectBase;
 import com.trigger.flappy.util.Constant;
 
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 import static com.trigger.flappy.util.GameEntities.simpleShells;
 
 /**
- * 简易光弹类，平A技能
+ * 简易光弹类，平A技能，点击 A键 发射
  *
  * author: lfy
  */
@@ -43,7 +44,7 @@ public class SimpleShell extends ObjectBase {
     public void drawSelf(Graphics g) {
         g.drawImage(img, x, y, width, height, null);
 
-        // 注意：此处需要更新光线对象的矩形坐标！之前射击有bug就是因为这里！
+        // 注意：此处需要更新光线对象的碰撞矩形坐标！之前射击有bug就是因为这里！
         rect.x = x;
         rect.y = y;
 

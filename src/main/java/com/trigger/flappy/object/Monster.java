@@ -1,9 +1,8 @@
 package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,7 +22,7 @@ public class Monster extends ObjectBase {
     private static BufferedImage[] imgs;
 
     // 回调函数，用于与奥特曼碰撞后，对奥特曼无敌状态的设置
-    public InvincibleHook invincibleHook;
+    public CollideInvincibleHook collideHook;
 
     /**
      * 静态代码块，让类加载的时候将怪兽的图片加载到内存中
@@ -58,12 +57,9 @@ public class Monster extends ObjectBase {
     // 怪兽被击败所获得分数
     public int scoreReceived;
 
-    // 如果是BOSS，也需要一个无敌状态
-    private boolean beamInvincible = false;
-
     public Monster() {}
 
-    public Monster(InvincibleHook invincibleHook) {
+    public Monster(CollideInvincibleHook collideHook) {
         // 新的怪兽对象固定从窗口最右端开始生成
         x = Constant.FRAME_WIDTH;
         // 速度固定
@@ -73,7 +69,7 @@ public class Monster extends ObjectBase {
         // 生成矩形
         rect = new Rectangle();
         // 一个用于奥特曼与怪兽碰撞后无敌状态相关设置的回调函数
-        this.invincibleHook = invincibleHook;
+        this.collideHook = collideHook;
     }
 
     public int getX() {
@@ -217,10 +213,7 @@ public class Monster extends ObjectBase {
         for (int i=0; i<beams.size(); i++) {
             if (this.getRect().intersects(beams.get(i).getRect())) {
                 this.heart -= beams.get(i).getDamageAmount();
-                if (this instanceof Boss) {
-
-                }
-                if (this.height < 1) {
+                if (this.heart < 1) {
                     eliminateLogic();
                 }
                 return ;
@@ -269,7 +262,7 @@ public class Monster extends ObjectBase {
                 // 碰到障碍物后，奥特曼短时间内无敌，以避免一直卡在一个障碍物上
                 ultraMan.setInvincible(true);
                 // 回调函数，在新的线程中将无敌时间结束后的奥特曼设为不无敌状态
-                invincibleHook.setNonInvincible(ultraMan);
+                collideHook.setNonInvincible(ultraMan);
                 return true;
             }
         }

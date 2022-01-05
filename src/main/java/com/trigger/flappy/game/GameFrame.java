@@ -1,8 +1,10 @@
 package com.trigger.flappy.game;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.object.*;
+import com.trigger.flappy.object.NirvanaBeam;
+import com.trigger.flappy.object.SimpleShell;
 import com.trigger.flappy.util.Constant;
 
 import java.awt.*;
@@ -68,17 +70,17 @@ public class GameFrame extends Frame {
         gameRun.start();
 
         /**
-         * 添加按键监听器，监听飞行对象
+         * 按键监听器，监听玩家的按键操作
          */
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                add(e);
+                pressKey(e);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                minu(e);
+                releaseKey(e);
             }
         });
     }
@@ -86,7 +88,7 @@ public class GameFrame extends Frame {
     /**
      * 按键
      */
-    private void add(KeyEvent e) {
+    private void pressKey(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 按下方向键上键
                 ultraMan.action(1);
@@ -119,7 +121,7 @@ public class GameFrame extends Frame {
     /**
      * 松键
      */
-    private void minu(KeyEvent e) {
+    private void releaseKey(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP: // 如果松开的是方向键上键
                 ultraMan.action(5);
@@ -281,6 +283,7 @@ public class GameFrame extends Frame {
         if (ultraMan.getMana() - SimpleShell.getManaValue() < 0) {
             return;
         }
+        // 扣除所需MP
         ultraMan.subMana(SimpleShell.getManaValue());
         SimpleShell simpleShell = new SimpleShell(ImageUtil.loadBufferedImage(Constant.SIMPLE_SHELL_IMG),
                 ultraMan.getX()+80, ultraMan.getY()+30, 45, 45, 15);
@@ -295,6 +298,7 @@ public class GameFrame extends Frame {
         if (ultraMan.getMana() - NirvanaBeam.getManaValue() < 0) {
             return;
         }
+        // 扣除所需MP
         ultraMan.subMana(NirvanaBeam.getManaValue());
         NirvanaBeam beam = new NirvanaBeam(ImageUtil.loadBufferedImage(Constant.BEAM_IMG),
                 ultraMan.getX()+80, ultraMan.getY()+30, 750, 50, 10);
@@ -335,7 +339,7 @@ public class GameFrame extends Frame {
 //                monsters.add(monster);
 //            }
 //        }
-        Monster monster = new Monster(new InvincibleHook());
+        Monster monster = new Monster(new CollideInvincibleHook());
         monsters.add(monster);
     }
 
@@ -344,7 +348,7 @@ public class GameFrame extends Frame {
      */
     private void createBoss() {
         if (boss == null && bossStatus == BOSS_NO_INIT) {
-            boss = new Boss(new InvincibleHook());
+            boss = new Boss(new CollideInvincibleHook());
             bossStatus = BOSS_IN_BATTLE;
         }
     }

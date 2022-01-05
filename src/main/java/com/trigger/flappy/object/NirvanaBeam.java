@@ -1,5 +1,6 @@
 package com.trigger.flappy.object;
 
+import com.trigger.flappy.object.ObjectBase;
 import com.trigger.flappy.util.Constant;
 import com.trigger.flappy.util.GameUtil;
 
@@ -9,7 +10,7 @@ import java.awt.image.BufferedImage;
 import static com.trigger.flappy.util.GameEntities.beams;
 
 /**
- * 超-必杀技
+ * 超-必杀技，点击 F键 发射
  *
  * author: lfy
  */
@@ -53,11 +54,7 @@ public class NirvanaBeam extends ObjectBase {
     public void drawSelf(Graphics g) {
         g.drawImage(img, x, y, width, height, null);
 
-//        // 绘制矩形
-//        g.setColor(Color.blue);
-//        g.drawRect(x, y, width, height);
-
-        // 注意：此处需要更新光线对象的矩形坐标！之前射击有bug就是因为这里！
+        // 注意：此处需要更新光线对象的碰撞矩形坐标！之前射击有bug就是因为这里！
         rect.x = x;
         rect.y = y;
 

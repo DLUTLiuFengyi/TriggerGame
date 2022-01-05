@@ -3,18 +3,19 @@ package com.trigger.flappy.method;
 import com.trigger.flappy.object.UltraMan;
 
 /**
- * 回调函数
+ * 设置碰撞后无敌的回调函数
+ *
  * 用于在飞行物与障碍物碰撞后，保证其在短时间内无敌
- * 避免卡在一个障碍物上、导致生命值快速降为0的不好的游戏体验
+ * 避免飞行物卡在一个障碍物上、导致生命值快速降为0的不好的游戏体验
  *
  * author: lfy
  */
-public class InvincibleHook {
+public class CollideInvincibleHook {
 
     // 无敌时间，默认为1000ms
     private static int duration = 1000;
 
-    public InvincibleHook() {}
+    public CollideInvincibleHook() {}
 
     /**
      * duration秒后无敌状态消失

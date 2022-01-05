@@ -1,11 +1,13 @@
 package com.trigger.flappy.object;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.InvincibleHook;
+import com.trigger.flappy.method.CollideInvincibleHook;
 import com.trigger.flappy.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
+import static com.trigger.flappy.util.GameEntities.*;
 
 /**
  * BOSS类
@@ -16,13 +18,13 @@ public class Boss extends Monster {
 
     private static BufferedImage bossImg;
 
-    private static int BOSS_FULL_HEART = 250;
+    private static int BOSS_FULL_HEART = 500;
 
     static {
         bossImg = ImageUtil.loadBufferedImage(Constant.BOSS_IMG);
     }
 
-    public Boss(InvincibleHook invincibleHook) {
+    public Boss(CollideInvincibleHook collideHook) {
         // 新的怪兽对象固定从窗口最右端开始生成
         x = Constant.FRAME_WIDTH;
         y = 100;
@@ -35,7 +37,7 @@ public class Boss extends Monster {
         // 生成矩形
         rect = new Rectangle();
         // 一个用于奥特曼与怪兽碰撞后无敌状态相关设置的回调函数
-        this.invincibleHook = invincibleHook;
+        this.collideHook = collideHook;
     }
 
     @Override
@@ -86,17 +88,53 @@ public class Boss extends Monster {
     }
 
     /**
+     * 与光弹、光线的碰撞检测
+     */
+    @Override
+    public void judgeCollideWithBeam() {
+        // 尚未进入屏幕中的障碍物，不进行碰撞检测
+        if (this.x > Constant.FRAME_WIDTH) {
+            return ;
+        }
+        for (int i=0; i<beams.size(); i++) {
+            if (this.getRect().intersects(beams.get(i).getRect())
+                    && !bossIgnoreBeams.contains(beams.get(i))) {
+                this.heart -= beams.get(i).getDamageAmount();
+                // 将此光线添加进之后会被BOSS无视的列表中，避免同一条光线多次对BOSS造成伤害的情况
+                bossIgnoreBeams.add(beams.get(i));
+                if (this.heart < 1) {
+                    eliminateLogic();
+                }
+                return ;
+            }
+        }
+        for (int i=0; i<simpleShells.size(); i++) {
+            if (this.getRect().intersects(simpleShells.get(i).getRect())) {
+                this.heart -= 2;
+                // 同时这个光弹对象也需要被删除，避免线程刷新时保留效果，导致障碍物被同一光弹多次攻击
+                simpleShells.remove(simpleShells.get(i));
+                if (this.heart < 1) {
+                    eliminateLogic();
+                }
+                return ;
+            }
+        }
+    }
+
+    /**
      * 绘制BOSS血条等信息
      */
     private void drawBossInfo(Graphics g) {
         // 绘制作为血条背景的矩形
         g.setColor(Color.white);
-        g.fillRect(Constant.FRAME_WIDTH/4, Constant.FRAME_HEIGHT - 100,
-                Constant.FRAME_WIDTH/2, 25);
+        g.fillRect(Constant.FRAME_WIDTH/4 - 50, Constant.FRAME_HEIGHT - 60,
+                Constant.FRAME_WIDTH/2 + 100,
+                20);
         // 绘制血量
         g.setColor(Color.red);
         // 血量矩形的宽度是血量比例
-        g.fillRect(Constant.FRAME_WIDTH/4, Constant.FRAME_HEIGHT - 100,
-                this.heart * (Constant.FRAME_WIDTH/2) / BOSS_FULL_HEART, 25);
+        g.fillRect(Constant.FRAME_WIDTH/4 - 50, Constant.FRAME_HEIGHT - 60,
+                this.heart * (Constant.FRAME_WIDTH/2) / BOSS_FULL_HEART + 100,
+                20);
     }
 }
