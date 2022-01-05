@@ -26,9 +26,9 @@ It's very rough and just has few functions.
 * A键发射光弹
 
     Press A to shoot a light bomb.
-* S键发射强力光线（外挂）
+* F键发射强力光线（外挂）
 
-    Press S to shoot powerful beam.
+    Press F to shoot powerful beam.
 
 > 敌人不断生成，含有血量，需要靠攻击手段将其击杀。不同类型的敌人的血量和速度均不相同。
 >
