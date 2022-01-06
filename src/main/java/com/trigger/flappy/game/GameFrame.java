@@ -17,22 +17,31 @@ import java.awt.image.BufferedImage;
 
 import static com.trigger.flappy.util.GameEntities.*;
 
+/**
+ * 游戏的主界面类
+ */
 public class GameFrame extends Frame {
 
     private Background background;
 //    private Timer timer;
     private Record record;
 
-    private int bossStatus = 0; // BOSS状态（未创建，正在战斗，已被打败）
-    private static int BOSS_NO_INIT = 0;
-    private static int BOSS_IN_BATTLE = 1;
-    private static int BOSS_BEAT = 2;
-
     // 游戏状态（普通战斗，boss战，游戏结束）
     private static int gameStatus = 1;
     private final static int NORMAL_BATTLE = 1;
     private final static int BOSS_BATTLE = 2;
     private final static int GAME_OVER = 3;
+
+    // BOSS状态（未创建，正在战斗，已被打败）
+    private int bossStatus = 0;
+    private static int BOSS_NO_INIT = 0;
+    private static int BOSS_IN_BATTLE = 1;
+    private static int BOSS_BEAT = 2;
+
+    // 普通怪兽状态（正常生成，停止生成）
+    private static int createMonsterStatus = 1;
+    private final static int CONTINUOUS_CREATE = 1;
+    private final static int STOP_CREATE = 2;
 
     private BufferedImage bufferedImage = new BufferedImage(
             Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR
@@ -171,16 +180,26 @@ public class GameFrame extends Frame {
                 }
                 if (gameStatus == NORMAL_BATTLE) { // 普通战斗模式
                     bossStatus = BOSS_NO_INIT;
-                    monsterCount += 1;
-                    if (monsterCount % 30 == 0) { // 控制怪兽对象生成速度
+                    // 此处加这个判断条件是为了修正从普通怪兽清空后到BOSS生成这段时间过长的bug
+                    if (createMonsterStatus != STOP_CREATE) {
+                        monsterCount += 1;
+                    }
+                    // 控制怪兽对象生成速度
+                    if (monsterCount % 30 == 0 && createMonsterStatus == CONTINUOUS_CREATE) {
                         // 不断创建怪兽对象
                         createMonsters();
                     }
-                    if (monsterCount > 500) { // 计数器大于3000，切换到BOSS战模式
-                        // monsterCount置为1，避免其值过大
-                        monsterCount = 1;
+                    if (monsterCount % 1000 == 0) { // 准备切换到BOSS战模式
+                        monsterCount = 1000;
+                        System.out.println("准备切换到BOSS战");
+                        // 先停止生成普通怪兽
+                        createMonsterStatus = STOP_CREATE;
                         // 切换为boss战模式，停止自动生成普通怪兽
-                        gameStatus = BOSS_BATTLE;
+                        if (monsters.size() < 1) {
+                            System.out.println("切换为BOSS战");
+                            // 普通怪兽列表清空后，才转换为BOSS战模式
+                            gameStatus = BOSS_BATTLE;
+                        }
                     }
 //                }
                 } else if (gameStatus == BOSS_BATTLE) {
@@ -364,6 +383,8 @@ public class GameFrame extends Frame {
         monsters.clear();
         System.out.println("打败BOSS");
         gameStatus = NORMAL_BATTLE;
+        createMonsterStatus = CONTINUOUS_CREATE;
+        monsterCount += 1;
     }
 
     /**
@@ -376,7 +397,9 @@ public class GameFrame extends Frame {
         boss = null;
         ultraMan.restart(); // 将奥特曼位置初始化
         scoreCounter.restart();
+        monsterCount = 0;
         gameStatus = NORMAL_BATTLE;
         bossStatus = BOSS_NO_INIT;
+        createMonsterStatus = CONTINUOUS_CREATE;
     }
 }
