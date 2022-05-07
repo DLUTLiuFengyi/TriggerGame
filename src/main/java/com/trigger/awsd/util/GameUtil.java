@@ -1,11 +1,9 @@
-package com.trigger.flappy.util;
+package com.trigger.awsd.util;
 
-import com.trigger.flappy.object.*;
+import com.trigger.awsd.object.*;
 
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**

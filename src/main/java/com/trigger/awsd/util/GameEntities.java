@@ -1,8 +1,8 @@
-package com.trigger.flappy.util;
+package com.trigger.awsd.util;
 
-import com.trigger.flappy.object.*;
-import com.trigger.flappy.object.NirvanaBeam;
-import com.trigger.flappy.object.SimpleShell;
+import com.trigger.awsd.object.*;
+import com.trigger.awsd.object.NirvanaBeam;
+import com.trigger.awsd.object.SimpleShell;
 
 import java.util.ArrayList;
 import java.util.List;

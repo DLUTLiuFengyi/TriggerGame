@@ -1,6 +1,6 @@
-package com.trigger.flappy.method;
+package com.trigger.awsd.method;
 
-import com.trigger.flappy.object.UltraMan;
+import com.trigger.awsd.object.UltraMan;
 
 /**
  * 设置碰撞后无敌的回调函数

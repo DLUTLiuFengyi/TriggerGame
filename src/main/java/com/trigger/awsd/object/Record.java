@@ -1,7 +1,7 @@
-package com.trigger.flappy.object;
+package com.trigger.awsd.object;
 
-import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
+import com.trigger.awsd.util.Constant;
+import com.trigger.awsd.util.GameUtil;
 
 import java.awt.*;
 

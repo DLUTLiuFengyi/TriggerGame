@@ -1,8 +1,8 @@
-package com.trigger.flappy.method;
+package com.trigger.awsd.method;
 
-import com.trigger.flappy.object.NirvanaBeam;
+import com.trigger.awsd.object.NirvanaBeam;
 
-import static com.trigger.flappy.util.GameEntities.beams;
+import static com.trigger.awsd.util.GameEntities.beams;
 
 /**
  * 光线类技能击中BOSS后

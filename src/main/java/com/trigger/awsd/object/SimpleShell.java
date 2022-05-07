@@ -1,12 +1,11 @@
-package com.trigger.flappy.object;
+package com.trigger.awsd.object;
 
-import com.trigger.flappy.object.ObjectBase;
-import com.trigger.flappy.util.Constant;
+import com.trigger.awsd.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameEntities.simpleShells;
+import static com.trigger.awsd.util.GameEntities.simpleShells;
 
 /**
  * 简易光弹类，平A技能，点击 A键 发射

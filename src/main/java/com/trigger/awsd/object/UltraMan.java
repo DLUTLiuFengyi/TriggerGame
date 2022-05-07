@@ -1,13 +1,12 @@
-package com.trigger.flappy.object;
+package com.trigger.awsd.object;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.util.Constant;
+import com.trigger.awsd.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameEntities.manaCount;
-import static com.trigger.flappy.util.GameEntities.monsterCount;
+import static com.trigger.awsd.util.GameEntities.manaCount;
 
 /**
  * 奥特曼类

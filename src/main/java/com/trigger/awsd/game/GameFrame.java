@@ -1,12 +1,12 @@
-package com.trigger.flappy.game;
+package com.trigger.awsd.game;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.BeamHitTheBossHook;
-import com.trigger.flappy.method.CollideInvincibleHook;
-import com.trigger.flappy.object.*;
-import com.trigger.flappy.object.NirvanaBeam;
-import com.trigger.flappy.object.SimpleShell;
-import com.trigger.flappy.util.Constant;
+import com.trigger.awsd.method.BeamHitTheBossHook;
+import com.trigger.awsd.method.CollideInvincibleHook;
+import com.trigger.awsd.object.*;
+import com.trigger.awsd.object.NirvanaBeam;
+import com.trigger.awsd.object.SimpleShell;
+import com.trigger.awsd.util.Constant;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -15,7 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameEntities.*;
+import static com.trigger.awsd.util.GameEntities.*;
 
 /**
  * 游戏的主界面类

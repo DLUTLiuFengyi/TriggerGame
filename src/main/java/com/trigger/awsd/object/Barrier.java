@@ -1,15 +1,15 @@
-package com.trigger.flappy.object;
+package com.trigger.awsd.object;
 
 import com.image.ImageUtil;
-import com.trigger.flappy.method.CollideInvincibleHook;
-import com.trigger.flappy.util.Constant;
+import com.trigger.awsd.method.CollideInvincibleHook;
+import com.trigger.awsd.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import static com.trigger.flappy.util.GameEntities.*;
-import static com.trigger.flappy.util.GameUtil.*;
+import static com.trigger.awsd.util.GameEntities.*;
+import static com.trigger.awsd.util.GameUtil.*;
 
 /**
  * 障碍物类

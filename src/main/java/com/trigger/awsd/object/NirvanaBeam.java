@@ -1,13 +1,11 @@
-package com.trigger.flappy.object;
+package com.trigger.awsd.object;
 
-import com.trigger.flappy.object.ObjectBase;
-import com.trigger.flappy.util.Constant;
-import com.trigger.flappy.util.GameUtil;
+import com.trigger.awsd.util.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.trigger.flappy.util.GameEntities.beams;
+import static com.trigger.awsd.util.GameEntities.beams;
 
 /**
  * 超-必杀技，点击 F键 发射

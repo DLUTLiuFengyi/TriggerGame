@@ -1,6 +1,6 @@
-package com.trigger.flappy.app;
+package com.trigger.awsd.app;
 
-import com.trigger.flappy.game.GameFrame;
+import com.trigger.awsd.game.GameFrame;
 
 public class GameApp {
 
